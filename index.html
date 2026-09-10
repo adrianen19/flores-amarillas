@@ -1,23 +1,20 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="description" content="Animación festiva del Día de las Flores Amarillas" />
   <title>¡Feliz Día de las Flores Amarillas!</title>
 
-  <!-- Fuente amigable, elegante y festiva de Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Quicksand:wght@600;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
       --gold-deep: #D48806;
       --gold-vivid: #FADB14;
       --gold-light: #FFF566;
-      --green-leaf: #389E0D;
-      --green-stem: #237804;
       --warm-bg-start: #FFFBE6;
       --warm-bg-end: #FFE58F;
       --night-start: #0b1230;
@@ -41,7 +38,6 @@
       font-family: 'Quicksand', sans-serif;
     }
 
-    /* Contenedor Principal */
     .viewport {
       position: relative;
       width: 100vw;
@@ -50,9 +46,9 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      cursor: pointer;
     }
 
-    /* Fondo Bokeh Suave (fase inicial) */
     .bokeh-bg {
       position: absolute;
       inset: -50px;
@@ -62,7 +58,6 @@
       transition: opacity 3s ease;
     }
 
-    /* Fondo de Prado Soleado (Fase 2, de día) */
     .meadow-bg {
       position: absolute;
       inset: 0;
@@ -72,7 +67,6 @@
       transition: opacity 2.5s ease-in-out;
     }
 
-    /* Fondo Nocturno (Fase 3, cuando inicia la música) */
     .night-bg {
       position: absolute;
       inset: 0;
@@ -82,39 +76,28 @@
       transition: opacity 3.5s ease-in-out;
       pointer-events: none;
     }
+    .night-bg.active { opacity: 1; }
 
-    .night-bg.active {
-      opacity: 1;
-    }
-
-    /* Velo oscuro que se posa sobre el prado al caer la noche */
     .night-veil {
       position: absolute;
       inset: 0;
-      background: rgba(11, 18, 48, 0.55);
+      background: rgba(11, 18, 48, 0.45);
       opacity: 0;
       z-index: 4;
       transition: opacity 3.5s ease-in-out;
       pointer-events: none;
     }
+    .night-veil.active { opacity: 1; }
 
-    .night-veil.active {
-      opacity: 1;
-    }
-
-    /* Estrellas */
     .stars {
       position: absolute;
       inset: 0;
       z-index: 3;
       opacity: 0;
-      transition: opacity 3s ease-in-out 0.5s;
+      transition: opacity 3s ease-in-out;
       pointer-events: none;
     }
-
-    .stars.active {
-      opacity: 1;
-    }
+    .stars.active { opacity: 1; }
 
     .star {
       position: absolute;
@@ -128,51 +111,26 @@
       50% { opacity: 1; transform: scale(1.15); }
     }
 
-    /* Luna */
     .moon {
       position: absolute;
       top: 8%;
       right: 12%;
-      width: 90px;
-      height: 90px;
+      width: 80px;
+      height: 80px;
       border-radius: 50%;
       background: radial-gradient(circle at 35% 35%, #fffdf0 0%, #fff3c4 55%, #ffe58f 100%);
-      box-shadow: 0 0 60px 20px rgba(255, 245, 200, 0.45);
+      box-shadow: 0 0 50px 15px rgba(255, 245, 200, 0.4);
       z-index: 3;
       opacity: 0;
-      transition: opacity 3s ease-in-out 0.8s, transform 3s ease-in-out 0.8s;
-      transform: translateY(-30px);
+      transition: opacity 3s ease-in-out, transform 3s ease-in-out;
+      transform: translateY(-20px);
       pointer-events: none;
     }
-
     .moon.active {
       opacity: 1;
       transform: translateY(0);
     }
 
-    .moon::before {
-      content: '';
-      position: absolute;
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      background: rgba(212, 136, 6, 0.15);
-      top: 18px;
-      left: 22px;
-    }
-
-    .moon::after {
-      content: '';
-      position: absolute;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: rgba(212, 136, 6, 0.12);
-      top: 48px;
-      left: 50px;
-    }
-
-    /* Luces Bokeh Dinámicas en el fondo (fase inicial) */
     .orb {
       position: absolute;
       border-radius: 50%;
@@ -185,7 +143,6 @@
       100% { transform: translateY(-40px) scale(1.3); opacity: 0.7; }
     }
 
-    /* Canvas de Partículas (Pétalos dorados y chispas) */
     canvas#particles {
       position: absolute;
       inset: 0;
@@ -193,9 +150,7 @@
       pointer-events: none;
     }
 
-    /* ==================================================
-       PANTALLA DE INICIO (necesaria para permitir audio)
-       ================================================== */
+    /* Pantalla inicial */
     .start-gate {
       position: absolute;
       inset: 0;
@@ -204,89 +159,63 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      gap: 1.4rem;
+      gap: 1.2rem;
       background: radial-gradient(circle at center, #1a1403 0%, #0b0801 100%);
-      transition: opacity 1s ease, visibility 1s ease;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
     }
-
     .start-gate.hidden {
       opacity: 0;
       visibility: hidden;
       pointer-events: none;
     }
-
     .start-gate p {
       color: #ffe58f;
-      font-size: 0.95rem;
+      font-size: 1.15rem;
       letter-spacing: 2px;
       text-transform: uppercase;
-      opacity: 0.8;
       text-align: center;
-      padding: 0 1.5rem;
+      line-height: 1.6;
     }
-
     .start-btn {
-      padding: 0.9rem 2.2rem;
+      padding: 1rem 2.8rem;
       border: none;
       border-radius: 999px;
       font-family: 'Quicksand', sans-serif;
       font-weight: 700;
-      font-size: 1.05rem;
+      font-size: 1.15rem;
       color: #3d2500;
       background: linear-gradient(135deg, #fff566, #faad14);
       box-shadow: 0 10px 30px rgba(250, 173, 20, 0.4);
       cursor: pointer;
-      animation: pulseBtn 2.2s ease-in-out infinite;
+      animation: pulseBtn 2s ease-in-out infinite;
+    }
+
+    .file-select-label {
+      font-size: 0.82rem;
+      color: #ffd591;
+      text-decoration: underline;
+      cursor: pointer;
+      opacity: 0.8;
+      margin-top: 5px;
     }
 
     @keyframes pulseBtn {
       0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.05); }
+      50% { transform: scale(1.06); }
     }
 
-    /* Control de sonido */
-    .sound-toggle {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      z-index: 40;
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      border: none;
-      background: rgba(255, 255, 255, 0.2);
-      backdrop-filter: blur(6px);
-      color: #fff8e1;
-      font-size: 1.2rem;
-      cursor: pointer;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.2s ease;
-    }
-
-    .sound-toggle.visible {
-      display: flex;
-    }
-
-    .sound-toggle:hover {
-      background: rgba(255, 255, 255, 0.32);
-    }
-
-    /* ==================================================
-       FASE 1: El Girasol Inicial
-       ================================================== */
+    /* Fase 1: Girasol */
     .intro-sunflower-container {
       position: absolute;
       z-index: 5;
       display: flex;
       justify-content: center;
       align-items: center;
-      width: 380px;
-      height: 380px;
-      filter: drop-shadow(0 0 35px rgba(250, 219, 20, 0.45));
+      width: 340px;
+      height: 340px;
+      filter: drop-shadow(0 0 35px rgba(250, 219, 20, 0.5));
+      pointer-events: none;
     }
-
     .intro-sunflower-container.playing {
       animation:
         emergeSunflower 2.5s cubic-bezier(0.2, 0.9, 0.3, 1) forwards,
@@ -295,55 +224,29 @@
     }
 
     @keyframes emergeSunflower {
-      0% {
-        transform: scale(0.1) translateY(80px);
-        opacity: 0;
-        filter: blur(15px);
-      }
-      60% {
-        filter: blur(0px);
-      }
-      100% {
-        transform: scale(1) translateY(0);
-        opacity: 1;
-      }
+      0% { transform: scale(0.1) translateY(80px); opacity: 0; filter: blur(15px); }
+      100% { transform: scale(1) translateY(0); opacity: 1; filter: blur(0px); }
     }
-
     @keyframes rotateSunflower {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
-
     @keyframes dissolveSunflower {
-      0% {
-        transform: scale(1) rotate(210deg);
-        opacity: 1;
-        filter: blur(0px);
-      }
-      100% {
-        transform: scale(1.6) rotate(260deg);
-        opacity: 0;
-        filter: blur(25px);
-      }
+      0% { transform: scale(1) rotate(210deg); opacity: 1; filter: blur(0px); }
+      100% { transform: scale(1.6) rotate(260deg); opacity: 0; filter: blur(25px); }
     }
 
-    .sunflower-svg {
-      width: 100%;
-      height: 100%;
-    }
+    .sunflower-svg { width: 100%; height: 100%; }
 
-    /* ==================================================
-       FASE 2: Prado de Flores Amarillas
-       ================================================== */
+    /* Fase 2: Prado */
     .field-container {
       position: absolute;
       inset: 0;
       z-index: 3;
       pointer-events: none;
       opacity: 0;
-      transition: opacity 3s ease;
+      transition: opacity 2.5s ease;
     }
-
     .flower-stem {
       position: absolute;
       bottom: -20px;
@@ -353,175 +256,177 @@
       align-items: center;
       will-change: transform;
     }
-
     .leaf {
       position: absolute;
       background: linear-gradient(135deg, #73d13d, #389e0d);
       border-radius: 0 100% 0 100%;
     }
-
-    .sway-breeze {
-      animation: sway 5s ease-in-out infinite alternate;
-    }
-
-    .pulse-heartbeat {
-      animation: heartbeat 3s ease-in-out infinite alternate;
-    }
+    .sway-breeze { animation: sway 5s ease-in-out infinite alternate; }
+    .pulse-heartbeat { animation: heartbeat 3s ease-in-out infinite alternate; }
 
     @keyframes sway {
       0% { transform: rotate(-5deg); }
       100% { transform: rotate(6deg); }
     }
-
     @keyframes heartbeat {
-      0% { transform: scale(1); }
+      0%, 100% { transform: scale(1); }
       50% { transform: scale(1.05); }
-      100% { transform: scale(0.98); }
     }
 
+    /* Subtítulos Amarillos */
+    .lyric-line {
+      position: absolute;
+      top: 24%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.95);
+      z-index: 15;
+      color: #fff466;
+      font-family: 'Quicksand', sans-serif;
+      font-size: clamp(1.4rem, 4vw, 2.3rem);
+      font-weight: 700;
+      text-align: center;
+      text-shadow: 0 0 14px rgba(250, 219, 20, 0.9),
+                   0 0 28px rgba(212, 136, 6, 0.7),
+                   0 4px 12px rgba(0, 0, 0, 0.85);
+      opacity: 0;
+      transition: opacity 0.35s ease, transform 0.35s ease;
+      pointer-events: none;
+      max-width: 85%;
+      line-height: 1.35;
+    }
+    .lyric-line.visible {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .hint-tap {
+      position: absolute;
+      bottom: 25px;
+      z-index: 20;
+      font-size: 0.85rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #ffe58f;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 1s ease;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+    }
+    .hint-tap.show { opacity: 0.65; }
+
     /* ==================================================
-       FASE 4: Mensaje Central Estilizado
+       MENSAJE FINAL Y DEDICATORIA DE ADRIÁN
        ================================================== */
     .message-container {
       position: relative;
-      z-index: 10;
+      z-index: 25;
       text-align: center;
       opacity: 0;
-      transform: translateY(30px) scale(0.95);
-      transition: all 2s cubic-bezier(0.16, 1, 0.3, 1);
-      padding: 2.5rem 3rem;
-      border-radius: 30px;
-      background: rgba(255, 255, 255, 0.12);
-      backdrop-filter: blur(14px);
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35),
-                  0 0 0 1px rgba(255, 255, 255, 0.15);
+      transform: translateY(30px) scale(0.9);
+      transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+      padding: 2.2rem 2.8rem;
+      border-radius: 28px;
+      background: rgba(15, 20, 35, 0.82);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7),
+                  0 0 0 1px rgba(255, 235, 143, 0.35);
       max-width: 90%;
+      pointer-events: none;
     }
-
     .message-container.visible {
       opacity: 1;
       transform: translateY(0) scale(1);
+      pointer-events: auto;
     }
-
     .tagline {
       font-size: 1.1rem;
       letter-spacing: 4px;
       text-transform: uppercase;
       color: #ffe58f;
       font-weight: 700;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.4rem;
     }
-
     .title {
       font-family: 'Caveat', cursive;
-      font-size: clamp(2.8rem, 7vw, 5.5rem);
+      font-size: clamp(2.8rem, 6.5vw, 5rem);
       font-weight: 700;
       line-height: 1.1;
-      background: linear-gradient(135deg, #ffe58f 0%, #faad14 40%, #fff566 80%);
+      background: linear-gradient(135deg, #fff566 0%, #faad14 45%, #ffd666 90%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      text-shadow: 0 10px 30px rgba(250, 173, 20, 0.3);
+      text-shadow: 0 10px 30px rgba(250, 173, 20, 0.4);
     }
-
     .subtitle {
-      margin-top: 1rem;
+      margin-top: 0.8rem;
       font-size: 1.1rem;
       color: #fdf3d6;
       max-width: 480px;
     }
 
-    .song-credit {
-      margin-top: 0.8rem;
-      font-size: 0.8rem;
-      color: rgba(253, 243, 214, 0.65);
-      letter-spacing: 0.5px;
+    /* Caja especial: Muñeco de Adrián con Corazón */
+    .author-badge {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      margin-top: 1.4rem;
+      padding: 0.6rem 1.4rem;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 50px;
+      border: 1px solid rgba(255, 245, 102, 0.25);
     }
 
-    /* Línea de letra sincronizada con la música */
-    .lyric-line {
-      position: absolute;
-      left: 50%;
-      bottom: 8%;
-      transform: translateX(-50%) translateY(10px);
-      z-index: 11;
-      color: #fff8e1;
-      font-size: clamp(1rem, 2.4vw, 1.4rem);
-      font-weight: 600;
-      text-align: center;
-      text-shadow: 0 4px 18px rgba(0, 0, 0, 0.5);
-      opacity: 0;
-      transition: opacity 0.6s ease, transform 0.6s ease;
-      pointer-events: none;
-      max-width: 90%;
+    .cute-character {
+      width: 46px;
+      height: 46px;
+      animation: charFloat 3s ease-in-out infinite alternate;
     }
 
-    .lyric-line.visible {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
+    @keyframes charFloat {
+      0% { transform: translateY(0px) rotate(-3deg); }
+      100% { transform: translateY(-5px) rotate(3deg); }
     }
 
-    /* Botón de repetición */
+    .beating-heart {
+      animation: heartPulse 1.2s infinite ease-in-out;
+      transform-origin: 32px 30px;
+    }
+
+    @keyframes heartPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.15); }
+    }
+
+    .author-text {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+    }
+    .author-name {
+      font-family: 'Caveat', cursive;
+      font-size: 1.6rem;
+      color: #FFF566;
+      line-height: 1;
+      text-shadow: 0 0 10px rgba(250, 219, 20, 0.5);
+    }
+    .author-sub {
+      font-size: 0.82rem;
+      color: #ffe58f;
+      opacity: 0.9;
+    }
+
     .replay-btn {
-      margin-top: 1.5rem;
-      padding: 0.7rem 1.8rem;
+      margin-top: 1.2rem;
+      padding: 0.75rem 2rem;
       border: none;
       border-radius: 999px;
       font-family: 'Quicksand', sans-serif;
       font-weight: 700;
       font-size: 0.95rem;
-      letter-spacing: 0.5px;
       color: #3d2500;
       background: linear-gradient(135deg, #fff566, #faad14);
-      box-shadow: 0 8px 20px rgba(212, 136, 6, 0.35);
       cursor: pointer;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    .message-container.visible .replay-btn {
-      opacity: 1;
-      pointer-events: auto;
-      transition: opacity 1s ease 0.6s;
-    }
-
-    .replay-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 24px rgba(212, 136, 6, 0.45);
-    }
-
-    .replay-btn:active {
-      transform: translateY(0);
-    }
-
-    /* Ajustes responsivos */
-    @media (max-width: 768px) {
-      .intro-sunflower-container {
-        width: 260px;
-        height: 260px;
-      }
-      .message-container {
-        padding: 1.8rem;
-      }
-      .moon {
-        width: 60px;
-        height: 60px;
-        top: 6%;
-        right: 8%;
-      }
-    }
-
-    /* Respeta la preferencia de movimiento reducido */
-    @media (prefers-reduced-motion: reduce) {
-      .intro-sunflower-container.playing {
-        animation: emergeSunflower 1.5s ease forwards, dissolveSunflower 1s ease 3s forwards;
-      }
-      .sway-breeze, .pulse-heartbeat, .orb, .star, .start-btn {
-        animation: none !important;
-      }
-      .message-container, .night-bg, .night-veil, .stars, .moon {
-        transition: opacity 1.2s ease;
-      }
+      box-shadow: 0 8px 20px rgba(212, 136, 6, 0.35);
     }
   </style>
 </head>
@@ -529,34 +434,29 @@
 
 <div class="viewport" id="stage">
 
-  <!-- Pantalla de inicio: requerida por los navegadores para permitir audio con sonido -->
   <div class="start-gate" id="startGate">
-    <p>Una experiencia con música<br>Toca para comenzar</p>
-    <button class="start-btn" id="startBtn" type="button">🌻 Comenzar</button>
+    <p>Día de las Flores Amarillas<br>Experiencia Especial</p>
+    <button class="start-btn" id="startBtn" type="button">🌻 Toca para Iniciar</button>
+    <label class="file-select-label">
+      ¿Tienes el archivo MP3 en tu equipo? Haz clic aquí para seleccionarlo directamente
+      <input type="file" id="audioFileInput" accept="audio/*" style="display: none;">
+    </label>
   </div>
 
-  <!-- Control de silencio, visible una vez iniciada la experiencia -->
-  <button class="sound-toggle" id="soundToggle" type="button" aria-label="Silenciar música">🔊</button>
-
-  <!-- Fondo 1: Bokeh Inicial -->
   <div class="bokeh-bg" id="bokehBg">
     <div class="orb" style="width: 300px; height: 300px; left: 10%; top: 20%;"></div>
     <div class="orb" style="width: 250px; height: 250px; right: 15%; top: 50%; animation-delay: -3s;"></div>
-    <div class="orb" style="width: 180px; height: 180px; left: 45%; bottom: 10%; animation-delay: -5s;"></div>
   </div>
 
-  <!-- Fondo 2: Prado Cálido (de día) -->
   <div class="meadow-bg" id="meadowBg"></div>
-
-  <!-- Fondo 3: Cielo nocturno (aparece cuando inicia la música) -->
   <div class="night-bg" id="nightBg"></div>
   <div class="night-veil" id="nightVeil"></div>
   <div class="stars" id="starsLayer"></div>
   <div class="moon" id="moon"></div>
 
-  <!-- Fase 1: Girasol Inicial SVG -->
+  <!-- Girasol -->
   <div class="intro-sunflower-container" id="introSunflower">
-    <svg class="sunflower-svg" viewBox="0 0 200 200" role="img" aria-label="Girasol animado">
+    <svg class="sunflower-svg" viewBox="0 0 200 200">
       <defs>
         <radialGradient id="sunflowerCore" cx="50%" cy="50%" r="50%">
           <stop offset="0%" stop-color="#3d1e03" />
@@ -569,7 +469,6 @@
           <stop offset="100%" stop-color="#D48806" />
         </linearGradient>
       </defs>
-
       <g transform="translate(100, 100)">
         <g id="petals">
           <path d="M 0,-25 Q -14,-60 0,-95 Q 14,-60 0,-25" fill="url(#petalGrad)" transform="rotate(0)" />
@@ -589,7 +488,6 @@
           <path d="M 0,-25 Q -14,-60 0,-95 Q 14,-60 0,-25" fill="url(#petalGrad)" transform="rotate(315)" />
           <path d="M 0,-25 Q -14,-60 0,-95 Q 14,-60 0,-25" fill="url(#petalGrad)" transform="rotate(337.5)" />
         </g>
-
         <circle cx="0" cy="0" r="32" fill="url(#sunflowerCore)" />
         <circle cx="0" cy="0" r="28" fill="none" stroke="#683908" stroke-dasharray="3,3" stroke-width="2" />
         <circle cx="0" cy="0" r="18" fill="none" stroke="#faad14" stroke-dasharray="2,4" stroke-width="1.5" opacity="0.6"/>
@@ -597,56 +495,99 @@
     </svg>
   </div>
 
-  <!-- Fase 2: Prado dinámico con Margaritas y Tulipanes -->
   <div class="field-container" id="flowerField"></div>
+  <canvas id="particles"></canvas>
 
-  <!-- Canvas de Partículas (Eclosión y brisa de pétalos) -->
-  <canvas id="particles" aria-hidden="true"></canvas>
-
-  <!-- Línea de letra sincronizada (se completa por el usuario, ver JS) -->
+  <!-- Subtítulos -->
   <div class="lyric-line" id="lyricLine"></div>
+  <div class="hint-tap" id="hintTap">Toca 2 veces en cualquier lugar para ver el mensaje</div>
 
-  <!-- Fase 4: Mensaje Final (aparece de noche, con la música sonando) -->
+  <!-- Mensaje Final con Muñeco de Adrián -->
   <div class="message-container" id="message">
     <div class="tagline">Una promesa dorada</div>
     <h1 class="title">¡Feliz Día de las Flores Amarillas!</h1>
     <p class="subtitle">Que la alegría, la luz y los mejores momentos iluminen tu camino hoy y siempre.</p>
-    <p class="song-credit">🎵 "Cuenta Conmigo" — Río Roma</p>
-    <button class="replay-btn" id="replayBtn" type="button">Ver de nuevo</button>
+
+    <!-- Muñeco tierno con corazón -->
+    <div class="author-badge">
+      <svg class="cute-character" viewBox="0 0 64 64">
+        <!-- Orejitas -->
+        <circle cx="18" cy="18" r="8" fill="#ffe58f" />
+        <circle cx="46" cy="18" r="8" fill="#ffe58f" />
+        <circle cx="18" cy="18" r="4.5" fill="#ffbb96" />
+        <circle cx="46" cy="18" r="4.5" fill="#ffbb96" />
+        
+        <!-- Cabeza y cuerpo -->
+        <circle cx="32" cy="34" r="22" fill="#fffbe6" stroke="#faad14" stroke-width="1.5"/>
+        
+        <!-- Ojos sonrientes -->
+        <circle cx="25" cy="30" r="2.2" fill="#3d2500" />
+        <circle cx="39" cy="30" r="2.2" fill="#3d2500" />
+        <!-- Mejillas sonrojadas -->
+        <ellipse cx="21" cy="35" rx="3.5" ry="2" fill="#ff7875" opacity="0.75" />
+        <ellipse cx="43" cy="35" rx="3.5" ry="2" fill="#ff7875" opacity="0.75" />
+        <!-- Boca feliz -->
+        <path d="M 29 36 Q 32 40 35 36" fill="none" stroke="#3d2500" stroke-width="1.8" stroke-linecap="round"/>
+
+        <!-- Corazón latiendo entre sus manitas -->
+        <g class="beating-heart">
+          <path d="M 32,38 A 4,4 0 0,0 26,34 A 4,4 0 0,0 24,38 Q 24,43 32,48 Q 40,43 40,38 A 4,4 0 0,0 38,34 A 4,4 0 0,0 32,38 Z" fill="#ff4d4f" />
+        </g>
+        
+        <!-- Manitas sosteniendo el corazón -->
+        <circle cx="23" cy="40" r="3.2" fill="#fffbe6" stroke="#faad14" stroke-width="1.2"/>
+        <circle cx="41" cy="40" r="3.2" fill="#fffbe6" stroke="#faad14" stroke-width="1.2"/>
+      </svg>
+
+      <div class="author-text">
+        <span class="author-name">Adrián</span>
+        <span class="author-sub">Hecho con mucho amor 💛</span>
+      </div>
+    </div>
+
+    <button class="replay-btn" id="replayBtn" type="button">Volver a vivirlo</button>
   </div>
 
-  <!--
-    ============================================================
-    AUDIO DE FONDO
-    ============================================================
-    Por derechos de autor, este archivo NO incluye la canción.
-    Para activarla:
-      1) Consigue el archivo de audio de "Cuenta Conmigo" de Río Roma
-         de una fuente legítima donde tengas licencia de uso
-         (compra digital, tu propia biblioteca, licencia comercial, etc).
-      2) Colócalo junto a este HTML con el nombre "cuenta-conmigo.mp3"
-         (o cambia el "src" de abajo por la ruta/URL que corresponda).
-    Mientras no exista el archivo, el audio simplemente no sonará
-    y la animación seguirá funcionando con normalidad.
-  -->
-  <audio id="bgMusic" preload="auto" loop>
-    <source src="cuenta-conmigo.mp3" type="audio/mpeg">
-  </audio>
+  <audio id="bgMusic" src="cuenta-conmigo.mp3" preload="auto"></audio>
+
 </div>
 
 <script>
-  /* ==================================================
-     CONFIGURACIÓN GENERAL
-     ================================================== */
-  const isMobile = window.innerWidth < 600;
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const timers = [];
-  const bgMusic = document.getElementById('bgMusic');
-  let musicMuted = false;
+  /* SUBTÍTULOS */
+  const lyricCues = [
+    { start: 3, end: 16, text: "Ooooh... 🎶" },
+    { start: 17, end: 21, text: "Hay un mundo, mil planetas que vienen y van..." },
+    { start: 22, end: 25, text: "Satélites, cometas y estrellas hay más..." },
+    { start: 26, end: 30, text: "Millones de personas, formas de pensar..." },
+    { start: 31, end: 35, text: "Y a pesar que todos somos diferentes, lo genial..." },
+    { start: 36, end: 39, text: "Es que hay cosas que nos unen cuando hay voluntad..." },
+    { start: 40, end: 43, text: "Es que hay sueños que nos llevan al mismo lugar..." },
+    { start: 44, end: 51, text: "¡Por eso tú cuenta conmigo! Llueva o haya sol, en el desierto o en el frío... ¡Donde vayas voy!" },
+    { start: 52, end: 57, text: "Porque yo soy de esos amigos que aunque no siempre ves, ahí yo siempre estoy..." },
+    { start: 58, end: 65, text: "¡Por eso tú cuenta conmigo! En el bosque o el mar... Si un día te encuentras en peligro me hago Superman..." },
+    { start: 66, end: 72, text: "Y si los dedos de una mano sirven para contar amigos de corazón..." },
+    { start: 73, end: 76, text: "¡Cuenta conmigo por favor! ✨" },
+    { start: 77, end: 87, text: "Ooooh... 💛" },
+    { start: 88, end: 93, text: "Hey, verás que el tiempo crecerá nuestra amistad..." },
+    { start: 94, end: 97, text: "Pues pase lo que pase te voy a apoyar..." },
+    { start: 98, end: 102, text: "Días buenos, días malos, yo aquí voy a estar..." },
+    { start: 103, end: 107, text: "Y a pesar que todos somos diferentes, lo genial..." },
+    { start: 108, end: 111, text: "Es que hay cosas que nos unen cuando hay voluntad..." },
+    { start: 112, end: 115, text: "Es que hay sueños que nos llevan al mismo lugar..." },
+    { start: 116, end: 123, text: "¡Por eso tú cuenta conmigo! Llueva o haya sol, en el desierto o en el frío... ¡Donde vayas voy!" },
+    { start: 124, end: 129, text: "Porque yo soy de esos amigos que aunque no siempre ves, ahí yo siempre estoy..." },
+    { start: 130, end: 137, text: "¡Por eso tú cuenta conmigo! En el bosque o el mar... Si un día te encuentras en peligro me hago Superman..." },
+    { start: 138, end: 147, text: "Y si los dedos de una mano sirven para contar amigos de corazón... ¡Amigos de corazón!" },
+    { start: 148, end: 153, text: "El universo nos ha dado la oportunidad..." },
+    { start: 154, end: 161, text: "Y año con año ver crecer nuestra amistad..." },
+    { start: 162, end: 176, text: "¡Por eso tú cuenta conmigo! Llueva o haya sol, en el desierto o en el frío... ¡Donde vayas voy!" },
+    { start: 177, end: 185, text: "¡Por eso tú cuenta conmigo! En el bosque o el mar... Si un día te encuentras en peligro me hago Superman..." },
+    { start: 186, end: 194, text: "Y si los dedos de una mano sirven para contar amigos de corazón... ¡Cuenta conmigo por favor!" },
+    { start: 195, end: 209, text: "Ooooh... 🌻" },
+    { start: 210, end: 218, text: "¡Cuenta conmigo por favor! 💛" }
+  ];
 
-  /* ==================================================
-     SISTEMA DE PARTÍCULAS CANVAS (Brillo y Pétalos)
-     ================================================== */
+  /* PARTÍCULAS LENTAS */
   const canvas = document.getElementById('particles');
   const ctx = canvas.getContext('2d');
   let width, height;
@@ -663,31 +604,31 @@
   class Particle {
     constructor(x, y, mode = 'burst') {
       this.x = x || Math.random() * width;
-      this.y = y || (mode === 'burst' ? height / 2 : -20);
+      this.y = y || (mode === 'burst' ? height / 2 : -30);
       this.mode = mode;
 
       if (mode === 'burst') {
         const angle = -Math.PI / 2 + (Math.random() - 0.5) * 2.2;
-        const speed = 4 + Math.random() * 9;
+        const speed = 2.5 + Math.random() * 4.5;
         this.vx = Math.cos(angle) * speed;
         this.vy = Math.sin(angle) * speed;
-        this.size = 10 + Math.random() * 16;
+        this.size = 10 + Math.random() * 14;
         this.alpha = 1;
-        this.gravity = -0.05;
+        this.gravity = -0.02;
         this.drag = 0.985;
       } else {
         this.x = Math.random() * width;
         this.y = -30;
-        this.vx = Math.sin(Math.random() * Math.PI) * 1.5;
-        this.vy = 1 + Math.random() * 2.2;
-        this.size = 8 + Math.random() * 10;
-        this.alpha = 0.8;
-        this.gravity = 0.01;
-        this.drag = 0.99;
+        this.vx = (Math.random() - 0.5) * 0.5;
+        this.vy = 0.3 + Math.random() * 0.4;
+        this.size = 9 + Math.random() * 11;
+        this.alpha = 0.85;
+        this.gravity = 0.001;
+        this.drag = 0.998;
       }
 
       this.rotation = Math.random() * Math.PI * 2;
-      this.vRot = (Math.random() - 0.5) * 0.08;
+      this.vRot = (Math.random() - 0.5) * 0.03;
       this.color = Math.random() > 0.3 ? '#FADB14' : '#FFE58F';
     }
 
@@ -699,12 +640,11 @@
       this.rotation += this.vRot;
 
       if (this.mode === 'burst') {
-        this.alpha -= 0.007;
-      } else {
-        if (this.y > height + 40) {
-          this.y = -30;
-          this.x = Math.random() * width;
-        }
+        this.alpha -= 0.006;
+      } else if (this.y > height + 40) {
+        this.y = -30;
+        this.x = Math.random() * width;
+        this.vy = 0.3 + Math.random() * 0.4;
       }
     }
 
@@ -714,37 +654,30 @@
       ctx.translate(this.x, this.y);
       ctx.rotate(this.rotation);
       ctx.globalAlpha = Math.max(this.alpha, 0);
-
       ctx.fillStyle = this.color;
-      ctx.shadowBlur = 12;
+      ctx.shadowBlur = 10;
       ctx.shadowColor = 'rgba(250, 219, 20, 0.4)';
-
       ctx.beginPath();
       ctx.moveTo(0, 0);
       ctx.quadraticCurveTo(this.size / 2, -this.size, 0, -this.size * 1.5);
       ctx.quadraticCurveTo(-this.size / 2, -this.size, 0, 0);
       ctx.fill();
-
       ctx.restore();
     }
   }
 
   function triggerBurst() {
-    const burstCount = isMobile ? 80 : 140;
-    const centerX = width / 2;
-    const centerY = height / 2;
-    for (let i = 0; i < burstCount; i++) {
-      particles.push(new Particle(centerX, centerY, 'burst'));
+    for (let i = 0; i < 90; i++) {
+      particles.push(new Particle(width / 2, height / 2, 'burst'));
     }
   }
 
   function initGentleFall() {
-    const maxParticles = isMobile ? 45 : 90;
     gentleFallInterval = setInterval(() => {
-      if (particles.length < maxParticles) {
+      if (particles.length < 60) {
         particles.push(new Particle(null, null, 'gentle'));
       }
-    }, 250);
+    }, 450);
   }
 
   function animateParticles() {
@@ -758,31 +691,25 @@
     }
     requestAnimationFrame(animateParticles);
   }
+  animateParticles();
 
-  /* ==================================================
-     ESTRELLAS DEL CIELO NOCTURNO
-     ================================================== */
+  /* GENERACIÓN DE FLORES */
   function createStars() {
     const layer = document.getElementById('starsLayer');
     layer.innerHTML = '';
-    const count = isMobile ? 45 : 90;
-    for (let i = 0; i < count; i++) {
+    for (let i = 0; i < 60; i++) {
       const star = document.createElement('div');
       star.className = 'star';
-      const size = 1 + Math.random() * 2.4;
+      const size = 1 + Math.random() * 2;
       star.style.width = `${size}px`;
       star.style.height = `${size}px`;
       star.style.left = `${Math.random() * 100}%`;
       star.style.top = `${Math.random() * 70}%`;
       star.style.animationDelay = `${Math.random() * -3}s`;
-      star.style.animationDuration = `${2 + Math.random() * 3}s`;
       layer.appendChild(star);
     }
   }
 
-  /* ==================================================
-     GENERACIÓN DINÁMICA DEL PRADO DE FLORES
-     ================================================== */
   const flowerSVGs = {
     daisy: (color) => `
       <svg width="80" height="80" viewBox="0 0 100 100">
@@ -805,122 +732,155 @@
   function createMeadow() {
     const container = document.getElementById('flowerField');
     container.innerHTML = '';
-    const flowersCount = Math.floor(window.innerWidth / 70);
+    const flowersCount = Math.floor(window.innerWidth / 75);
     const flowerTypes = ['daisy', 'tulip'];
     const colors = ['#FFF566', '#FADB14', '#FFD666', '#FFF082'];
 
     for (let i = 0; i < flowersCount; i++) {
       const stemWrapper = document.createElement('div');
-      stemWrapper.className = reduceMotion ? 'flower-stem' : 'flower-stem sway-breeze';
+      stemWrapper.className = 'flower-stem sway-breeze';
 
       const leftPos = (i / flowersCount) * 100 + (Math.random() * 4 - 2);
       const scale = 0.55 + Math.random() * 0.55;
-      const zIndex = Math.floor(scale * 10);
-      const delay = Math.random() * -6;
-
-      stemWrapper.style.left = `${leftPos}%`;
-      stemWrapper.style.zIndex = zIndex;
-      stemWrapper.style.transform = `scale(${scale})`;
-      stemWrapper.style.animationDelay = `${delay}s`;
-      stemWrapper.style.animationDuration = `${4.5 + Math.random() * 2.5}s`;
-
       const heightStem = 80 + Math.random() * 120;
       const type = flowerTypes[Math.floor(Math.random() * flowerTypes.length)];
       const color = colors[Math.floor(Math.random() * colors.length)];
       const leafSide = Math.random() > 0.5 ? 1 : -1;
-      const leafOffset = heightStem * 0.4;
+
+      stemWrapper.style.left = `${leftPos}%`;
+      stemWrapper.style.zIndex = Math.floor(scale * 10);
+      stemWrapper.style.transform = `scale(${scale})`;
+      stemWrapper.style.animationDelay = `${Math.random() * -6}s`;
 
       stemWrapper.innerHTML = `
-        <div class="${reduceMotion ? '' : 'pulse-heartbeat'}" style="animation-delay: ${Math.random() * -3}s">
+        <div class="pulse-heartbeat" style="animation-delay: ${Math.random() * -3}s">
           ${flowerSVGs[type](color)}
         </div>
         <div style="position: relative; width: 5px; height: ${heightStem}px; background: linear-gradient(to bottom, #73d13d, #237804); border-radius: 4px; margin-top: -10px;">
-          <div class="leaf" style="width: 22px; height: 14px; top: ${leafOffset}px; left: ${leafSide === 1 ? '3px' : '-20px'}; transform: rotate(${leafSide === 1 ? 20 : -20}deg);"></div>
+          <div class="leaf" style="width: 22px; height: 14px; top: ${heightStem * 0.4}px; left: ${leafSide === 1 ? '3px' : '-20px'}; transform: rotate(${leafSide === 1 ? 20 : -20}deg);"></div>
         </div>
       `;
-
       container.appendChild(stemWrapper);
     }
   }
 
-  /* ==================================================
-     LETRA SINCRONIZADA (opcional)
-     ================================================== */
-  // Por derechos de autor no incluyo el texto de la letra aquí.
-  // Si quieres mostrarla sincronizada, completa "text" en cada línea
-  // con tu propia transcripción (por ejemplo, escuchando el audio que
-  // subiste) y ajusta "start"/"end" (en segundos) a donde corresponda.
-  // Deja "text": '' en las líneas que no quieras mostrar.
-  const lyricCues = [
-    { start: 0, end: 0, text: '' },
-    { start: 0, end: 0, text: '' },
-    { start: 0, end: 0, text: '' },
-    { start: 0, end: 0, text: '' },
-    { start: 0, end: 0, text: '' },
-  ];
-
+  /* SUBTÍTULOS Y AUDIO */
+  const bgMusic = document.getElementById('bgMusic');
   const lyricEl = document.getElementById('lyricLine');
   let activeCue = null;
+  let lyricsTimer = null;
+  let songStartTime = null;
 
-  bgMusic.addEventListener('timeupdate', () => {
-    const t = bgMusic.currentTime;
-    const cue = lyricCues.find(c => c.text && t >= c.start && t <= c.end);
-    if (cue !== activeCue) {
-      activeCue = cue || null;
-      if (activeCue) {
-        lyricEl.textContent = activeCue.text;
-        lyricEl.classList.add('visible');
-      } else {
-        lyricEl.classList.remove('visible');
-      }
+  document.getElementById('audioFileInput').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+      bgMusic.src = URL.createObjectURL(file);
+      document.querySelector('.file-select-label').textContent = '✅ Música cargada: ' + file.name;
     }
   });
 
-  /* ==================================================
-     MÚSICA Y TRANSICIÓN A MODO NOCHE
-     ================================================== */
-  function startNightAndMusic() {
-    document.getElementById('nightBg').classList.add('active');
-    document.getElementById('nightVeil').classList.add('active');
-    document.getElementById('starsLayer').classList.add('active');
-    document.getElementById('moon').classList.add('active');
-    createStars();
+  function startLyricsClock() {
+    songStartTime = Date.now();
+    lyricsTimer = setInterval(() => {
+      if (isMessageShown) return;
 
-    // Intentar reproducir la música justo cuando cae la noche.
-    // Si el archivo cuenta-conmigo.mp3 no existe, esto falla en silencio
-    // y la animación continúa sin sonido.
-    bgMusic.currentTime = 0;
-    bgMusic.volume = 0.85;
-    const playPromise = bgMusic.play();
-    if (playPromise && playPromise.catch) {
-      playPromise
-        .then(() => {
-          document.getElementById('soundToggle').classList.add('visible');
-        })
-        .catch(() => {
-          console.warn('No se pudo reproducir la música (¿falta el archivo de audio?).');
-        });
-    }
+      let currentTime = (Date.now() - songStartTime) / 1000;
+      if (!bgMusic.paused && bgMusic.currentTime > 0) {
+        currentTime = bgMusic.currentTime;
+      }
+
+      const cue = lyricCues.find(c => currentTime >= c.start && currentTime <= c.end);
+      if (cue !== activeCue) {
+        activeCue = cue || null;
+        if (activeCue) {
+          lyricEl.textContent = activeCue.text;
+          lyricEl.classList.add('visible');
+        } else {
+          lyricEl.classList.remove('visible');
+        }
+      }
+    }, 200);
   }
 
-  document.getElementById('soundToggle').addEventListener('click', () => {
-    musicMuted = !musicMuted;
-    bgMusic.muted = musicMuted;
-    document.getElementById('soundToggle').textContent = musicMuted ? '🔇' : '🔊';
-  });
+  /* MENSAJE FINAL Y DOBLE PULSACIÓN */
+  let isMessageShown = false;
 
-  /* ==================================================
-     ORQUESTADOR CINEMATOGRÁFICO DE ESCENAS
-     ================================================== */
-  function clearTimers() {
-    timers.forEach(t => clearTimeout(t));
-    timers.length = 0;
-    if (gentleFallInterval) clearInterval(gentleFallInterval);
+  function showFinalMessage() {
+    if (isMessageShown) return;
+    isMessageShown = true;
+
+    if (lyricsTimer) clearInterval(lyricsTimer);
+    lyricEl.classList.remove('visible');
+    document.getElementById('hintTap').classList.remove('show');
+
+    const message = document.getElementById('message');
+    message.classList.add('visible');
+  }
+
+  let lastTap = 0;
+  function handleDblAction(e) {
+    if (e.target.closest('#startBtn') || e.target.closest('#replayBtn') || e.target.closest('.file-select-label')) return;
+
+    const now = Date.now();
+    if (now - lastTap < 400 && now - lastTap > 0) {
+      showFinalMessage();
+    }
+    lastTap = now;
+  }
+  window.addEventListener('click', handleDblAction);
+  window.addEventListener('touchend', handleDblAction);
+
+  /* SECUENCIA PRINCIPAL */
+  const timers = [];
+
+  function startExperience() {
+    const sunflower = document.getElementById('introSunflower');
+    const meadowBg = document.getElementById('meadowBg');
+    const bokehBg = document.getElementById('bokehBg');
+    const flowerField = document.getElementById('flowerField');
+
+    sunflower.classList.add('playing');
+
+    timers.push(setTimeout(() => {
+      triggerBurst();
+    }, 4100));
+
+    timers.push(setTimeout(() => {
+      sunflower.style.display = 'none';
+
+      bgMusic.volume = 1.0;
+      bgMusic.play().catch(() => {});
+
+      meadowBg.style.opacity = '1';
+      bokehBg.style.opacity = '0';
+      createMeadow();
+      flowerField.style.opacity = '1';
+      initGentleFall();
+
+      document.getElementById('nightBg').classList.add('active');
+      document.getElementById('nightVeil').classList.add('active');
+      document.getElementById('starsLayer').classList.add('active');
+      document.getElementById('moon').classList.add('active');
+      createStars();
+
+      document.getElementById('hintTap').classList.add('show');
+    }, 4900));
+
+    timers.push(setTimeout(() => {
+      startLyricsClock();
+    }, 7900));
   }
 
   function resetScene() {
-    clearTimers();
+    timers.forEach(t => clearTimeout(t));
+    timers.length = 0;
+    if (gentleFallInterval) clearInterval(gentleFallInterval);
+    if (lyricsTimer) clearInterval(lyricsTimer);
+
     particles = [];
+    isMessageShown = false;
+    activeCue = null;
+
     bgMusic.pause();
     bgMusic.currentTime = 0;
 
@@ -931,6 +891,9 @@
     const message = document.getElementById('message');
 
     message.classList.remove('visible');
+    document.getElementById('hintTap').classList.remove('show');
+    lyricEl.classList.remove('visible');
+
     flowerField.style.opacity = '0';
     flowerField.innerHTML = '';
     meadowBg.style.opacity = '0';
@@ -940,81 +903,27 @@
     document.getElementById('nightVeil').classList.remove('active');
     document.getElementById('starsLayer').classList.remove('active');
     document.getElementById('moon').classList.remove('active');
-    document.getElementById('soundToggle').classList.remove('visible');
-    lyricEl.classList.remove('visible');
-    activeCue = null;
 
     sunflower.style.display = 'flex';
     sunflower.classList.remove('playing');
-    void sunflower.offsetWidth; // forzar reflow
-    sunflower.classList.add('playing');
-  }
-
-  function runShow() {
-    const sunflower = document.getElementById('introSunflower');
-    const meadowBg = document.getElementById('meadowBg');
-    const bokehBg = document.getElementById('bokehBg');
-    const flowerField = document.getElementById('flowerField');
-    const message = document.getElementById('message');
-
-    sunflower.classList.add('playing');
-
-    if (reduceMotion) {
-      timers.push(setTimeout(() => {
-        sunflower.style.display = 'none';
-        meadowBg.style.opacity = '1';
-        bokehBg.style.opacity = '0';
-        createMeadow();
-        flowerField.style.opacity = '1';
-      }, 1200));
-
-      timers.push(setTimeout(() => {
-        startNightAndMusic();
-      }, 2200));
-
-      timers.push(setTimeout(() => {
-        message.classList.add('visible');
-      }, 2800));
-      return;
-    }
-
-    // 1. Disolución del girasol: explosión dorada
-    timers.push(setTimeout(() => {
-      triggerBurst();
-    }, 4100));
-
-    // 2. Revelar el prado dorado, de día
-    timers.push(setTimeout(() => {
-      sunflower.style.display = 'none';
-      meadowBg.style.opacity = '1';
-      bokehBg.style.opacity = '0';
-      createMeadow();
-      flowerField.style.opacity = '1';
-      initGentleFall();
-    }, 4900));
-
-    // 3. El prado respira un momento a la luz del día antes de anochecer
-    timers.push(setTimeout(() => {
-      startNightAndMusic();
-    }, 7600));
-
-    // 4. Aparición triunfal del mensaje, ya de noche con la música sonando
-    timers.push(setTimeout(() => {
-      message.classList.add('visible');
-    }, 9200));
+    void sunflower.offsetWidth;
+    startExperience();
   }
 
   document.getElementById('startBtn').addEventListener('click', () => {
+    bgMusic.play().then(() => {
+      bgMusic.pause();
+      bgMusic.currentTime = 0;
+    }).catch(() => {});
+
     document.getElementById('startGate').classList.add('hidden');
-    runShow();
+    startExperience();
   });
 
-  document.getElementById('replayBtn').addEventListener('click', () => {
+  document.getElementById('replayBtn').addEventListener('click', (e) => {
+    e.stopPropagation();
     resetScene();
-    requestAnimationFrame(() => runShow());
   });
-
-  animateParticles();
 </script>
 
 </body>
