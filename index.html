@@ -7,18 +7,20 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Quicksand:wght@600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
       --gold-deep: #D48806;
       --gold-vivid: #FADB14;
       --gold-light: #FFF566;
-      --warm-bg-start: #FFFBE6;
-      --warm-bg-end: #FFE58F;
-      --night-start: #0b1230;
-      --night-mid: #17235c;
-      --night-glow: #3b4ea3;
+      --sunset-top: #2c1b4d;
+      --sunset-mid: #c85a32;
+      --sunset-gold: #f39c12;
+      --sunset-warm: #fce473;
+      --night-top: #060919;
+      --night-mid: #0f1738;
+      --night-glow: #1e2c66;
     }
 
     * {
@@ -33,7 +35,7 @@
       width: 100%;
       height: 100%;
       overflow: hidden;
-      background: #0f0d05;
+      background: #060811;
       font-family: 'Quicksand', sans-serif;
     }
 
@@ -48,87 +50,18 @@
       cursor: pointer;
     }
 
+    /* BOKEH INICIAL */
     .bokeh-bg {
       position: absolute;
-      inset: -50px;
-      background: radial-gradient(circle at 50% 50%, #442a04 0%, #1a1403 60%, #070601 100%);
+      inset: -40px;
+      background: radial-gradient(circle at 50% 50%, #442a04 0%, #1a1403 60%, #060811 100%);
       filter: blur(40px);
-      z-index: 1;
-      transition: opacity 3s ease;
-    }
-
-    .meadow-bg {
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at center, #ffffff 0%, var(--warm-bg-start) 40%, var(--warm-bg-end) 100%);
-      opacity: 0;
       z-index: 2;
-      transition: opacity 2.5s ease-in-out;
-    }
-
-    .night-bg {
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at 50% 25%, var(--night-glow) 0%, var(--night-mid) 45%, var(--night-start) 100%);
-      opacity: 0;
-      z-index: 2;
-      transition: opacity 3.5s ease-in-out;
-      pointer-events: none;
-    }
-    .night-bg.active { opacity: 1; }
-
-    .night-veil {
-      position: absolute;
-      inset: 0;
-      background: rgba(11, 18, 48, 0.45);
-      opacity: 0;
-      z-index: 4;
-      transition: opacity 3.5s ease-in-out;
-      pointer-events: none;
-    }
-    .night-veil.active { opacity: 1; }
-
-    .stars {
-      position: absolute;
-      inset: 0;
-      z-index: 3;
-      opacity: 0;
-      transition: opacity 3s ease-in-out;
-      pointer-events: none;
-    }
-    .stars.active { opacity: 1; }
-
-    .star {
-      position: absolute;
-      border-radius: 50%;
-      background: #fffef2;
-      animation: twinkle 3s ease-in-out infinite;
-    }
-
-    @keyframes twinkle {
-      0%, 100% { opacity: 0.25; transform: scale(0.8); }
-      50% { opacity: 1; transform: scale(1.15); }
-    }
-
-    .moon {
-      position: absolute;
-      top: 8%;
-      right: 12%;
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 35% 35%, #fffdf0 0%, #fff3c4 55%, #ffe58f 100%);
-      box-shadow: 0 0 50px 15px rgba(255, 245, 200, 0.4);
-      z-index: 3;
-      opacity: 0;
-      transition: opacity 3s ease-in-out, transform 3s ease-in-out;
-      transform: translateY(-20px);
-      pointer-events: none;
-    }
-    .moon.active {
       opacity: 1;
-      transform: translateY(0);
+      transition: opacity 3s ease;
+      pointer-events: none;
     }
+    .bokeh-bg.fade-out { opacity: 0; }
 
     .orb {
       position: absolute;
@@ -136,92 +69,29 @@
       background: radial-gradient(circle, rgba(250, 219, 20, 0.6) 0%, rgba(250, 219, 20, 0) 70%);
       animation: floatOrb 8s infinite alternate ease-in-out;
     }
-
     @keyframes floatOrb {
-      0% { transform: translateY(0) scale(1); opacity: 0.3; }
-      100% { transform: translateY(-40px) scale(1.3); opacity: 0.7; }
+      0% { transform: translateY(0) scale(1); opacity: 0.35; }
+      100% { transform: translateY(-40px) scale(1.35); opacity: 0.75; }
     }
 
-    canvas#particles {
-      position: absolute;
-      inset: 0;
-      z-index: 7;
-      pointer-events: none;
-    }
-
-    /* Pantalla inicial */
-    .start-gate {
-      position: absolute;
-      inset: 0;
-      z-index: 50;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      gap: 1.2rem;
-      background: radial-gradient(circle at center, #1a1403 0%, #0b0801 100%);
-      transition: opacity 0.8s ease, visibility 0.8s ease;
-    }
-    .start-gate.hidden {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-    }
-    .start-gate p {
-      color: #ffe58f;
-      font-size: 1.15rem;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      text-align: center;
-      line-height: 1.6;
-    }
-    .start-btn {
-      padding: 1rem 2.8rem;
-      border: none;
-      border-radius: 999px;
-      font-family: 'Quicksand', sans-serif;
-      font-weight: 700;
-      font-size: 1.15rem;
-      color: #3d2500;
-      background: linear-gradient(135deg, #fff566, #faad14);
-      box-shadow: 0 10px 30px rgba(250, 173, 20, 0.4);
-      cursor: pointer;
-      animation: pulseBtn 2s ease-in-out infinite;
-    }
-
-    .file-select-label {
-      font-size: 0.82rem;
-      color: #ffd591;
-      text-decoration: underline;
-      cursor: pointer;
-      opacity: 0.8;
-      margin-top: 5px;
-    }
-
-    @keyframes pulseBtn {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.06); }
-    }
-
-    /* Fase 1: Girasol */
+    /* GIRASOL DE ENTRADA ROTATORIO */
     .intro-sunflower-container {
       position: absolute;
-      z-index: 5;
+      z-index: 20;
       display: flex;
       justify-content: center;
       align-items: center;
-      width: 340px;
-      height: 340px;
-      filter: drop-shadow(0 0 35px rgba(250, 219, 20, 0.5));
+      width: clamp(280px, 38vw, 420px);
+      height: clamp(280px, 38vw, 420px);
+      filter: drop-shadow(0 0 45px rgba(250, 219, 20, 0.65));
       pointer-events: none;
     }
     .intro-sunflower-container.playing {
       animation:
-        emergeSunflower 2.5s cubic-bezier(0.2, 0.9, 0.3, 1) forwards,
-        rotateSunflower 7s linear infinite,
-        dissolveSunflower 1s cubic-bezier(0.8, 0, 0.2, 1) 4.2s forwards;
+        emergeSunflower 2.4s cubic-bezier(0.2, 0.9, 0.3, 1) forwards,
+        rotateSunflower 8s linear infinite,
+        dissolveSunflower 1.1s cubic-bezier(0.8, 0, 0.2, 1) 4.2s forwards;
     }
-
     @keyframes emergeSunflower {
       0% { transform: scale(0.1) translateY(80px); opacity: 0; filter: blur(15px); }
       100% { transform: scale(1) translateY(0); opacity: 1; filter: blur(0px); }
@@ -232,65 +102,417 @@
     }
     @keyframes dissolveSunflower {
       0% { transform: scale(1) rotate(210deg); opacity: 1; filter: blur(0px); }
-      100% { transform: scale(1.6) rotate(260deg); opacity: 0; filter: blur(25px); }
+      100% { transform: scale(1.65) rotate(260deg); opacity: 0; filter: blur(25px); }
     }
-
     .sunflower-svg { width: 100%; height: 100%; }
 
-    /* Fase 2: Prado */
-    .field-container {
+    /* CÁMARA CINEMATOGRÁFICA */
+    .cinema-camera {
       position: absolute;
       inset: 0;
+      transform-origin: 50% 75%;
+      transition: transform 9.5s cubic-bezier(0.25, 1, 0.5, 1);
+      will-change: transform;
       z-index: 3;
-      pointer-events: none;
+    }
+    .cinema-camera.zoom-in {
+      transform: scale(1.06) translate(-1%, -1.2%);
+    }
+
+    /* CAPAS DE CIELO */
+    .sky-sunset {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, #3d1c5a 0%, #b84334 32%, #e67e22 60%, #f6c85f 82%, #fff3b0 100%);
+      opacity: 1;
+      z-index: 1;
+      transition: opacity 5.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .sky-sunset.fade-out { opacity: 0; }
+
+    .sky-twilight {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, #161233 0%, #2f1d47 35%, #59254b 65%, #a24b43 90%, #d88151 100%);
       opacity: 0;
-      transition: opacity 2.5s ease;
+      z-index: 2;
+      transition: opacity 5s ease-in-out;
+      pointer-events: none;
+    }
+    .sky-twilight.active { opacity: 1; }
+
+    .sky-night {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 75% 20%, var(--night-glow) 0%, var(--night-mid) 45%, var(--night-top) 85%);
+      opacity: 0;
+      z-index: 3;
+      transition: opacity 5.5s cubic-bezier(0.4, 0, 0.2, 1);
+      pointer-events: none;
+    }
+    .sky-night.active { opacity: 1; }
+
+    /* SOL DEL ATARDECER */
+    .cinematic-sun {
+      position: absolute;
+      top: 30%;
+      left: 18%;
+      width: 95px;
+      height: 95px;
+      border-radius: 50%;
+      background: radial-gradient(circle at center, #ffffff 15%, #fff1b8 40%, #faad14 75%, rgba(250, 173, 20, 0) 100%);
+      box-shadow: 0 0 65px 30px rgba(255, 170, 40, 0.75), 0 0 120px 60px rgba(255, 110, 20, 0.35);
+      z-index: 4;
+      opacity: 1;
+      transform: translateY(0);
+      transition: transform 7.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 6.5s ease-in;
+      pointer-events: none;
+    }
+    .cinematic-sun.sink {
+      transform: translateY(180px) scale(0.8);
+      opacity: 0;
+    }
+
+    /* ESTRELLAS */
+    .stars-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 5;
+      opacity: 0;
+      transition: opacity 4s ease;
+      pointer-events: none;
+    }
+    .stars-layer.active { opacity: 1; }
+
+    .star {
+      position: absolute;
+      border-radius: 50%;
+      background: #ffffff;
+      animation: twinkle 3.5s ease-in-out infinite alternate;
+    }
+    @keyframes twinkle {
+      0% { opacity: 0.2; transform: scale(0.7); }
+      100% { opacity: 1; transform: scale(1.25); }
+    }
+
+    /* LUNA */
+    .cinematic-moon {
+      position: absolute;
+      top: 9%;
+      right: 12%;
+      width: clamp(80px, 9.5vw, 115px);
+      height: clamp(80px, 9.5vw, 115px);
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #ffffff 0%, #fffde6 35%, #ffefa6 70%, #ffd666 100%);
+      box-shadow: 0 0 50px 18px rgba(255, 245, 180, 0.7), 0 0 95px 40px rgba(180, 215, 255, 0.3);
+      z-index: 6;
+      opacity: 0;
+      transform: translateY(-25px) scale(0.9);
+      transition: opacity 4.5s ease-out, transform 4.5s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+    }
+    .cinematic-moon.active {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    .moon-crater {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(220, 180, 100, 0.18);
+    }
+
+    /* COLINAS Y NIEBLA */
+    .hills-far {
+      position: absolute;
+      bottom: 22%;
+      left: -10%;
+      width: 120%;
+      height: 25%;
+      background: linear-gradient(180deg, #d36d3c 0%, #87362f 100%);
+      border-radius: 60% 70% 0 0 / 100% 100% 0 0;
+      z-index: 5;
+      transition: background 6s ease;
+    }
+    .hills-far.night { background: linear-gradient(180deg, #111b40 0%, #0a1029 100%); }
+
+    .hills-mid {
+      position: absolute;
+      bottom: 14%;
+      right: -10%;
+      width: 120%;
+      height: 26%;
+      background: linear-gradient(180deg, #7c3a22 0%, #462016 100%);
+      border-radius: 70% 60% 0 0 / 100% 100% 0 0;
+      z-index: 6;
+      transition: background 6s ease;
+    }
+    .hills-mid.night { background: linear-gradient(180deg, #0d1736 0%, #070d22 100%); }
+
+    .hills-near {
+      position: absolute;
+      bottom: -8%;
+      left: -5%;
+      width: 110%;
+      height: 32%;
+      background: linear-gradient(180deg, #442a12 0%, #1e1307 100%);
+      border-radius: 50% 50% 0 0 / 70% 70% 0 0;
+      z-index: 8;
+      transition: background 6s ease;
+    }
+    .hills-near.night { background: linear-gradient(180deg, #091326 0%, #030712 100%); }
+
+    /* NUBES */
+    .clouds-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 4;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .cloud {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(16px);
+      background: radial-gradient(ellipse at center, rgba(255,255,255,0.9) 0%, rgba(255,214,158,0.5) 55%, rgba(255,214,158,0) 100%);
+      animation: driftCloud 90s linear infinite alternate;
+      transition: opacity 5s ease, filter 5s ease;
+    }
+    @keyframes driftCloud {
+      0% { transform: translateX(-4%); }
+      100% { transform: translateX(4%); }
+    }
+    .clouds-layer.night .cloud {
+      opacity: 0.28;
+      filter: blur(20px) brightness(0.55) saturate(0.4);
+    }
+
+    .fog-band {
+      position: absolute;
+      left: -10%;
+      width: 120%;
+      height: 7%;
+      pointer-events: none;
+      filter: blur(7px);
+      opacity: 0;
+      transition: opacity 5s ease, background 6s ease;
+    }
+    .fog-band.dusk {
+      background: linear-gradient(180deg, rgba(255, 214, 158, 0) 0%, rgba(255, 200, 150, 0.4) 100%);
+      opacity: 0.75;
+    }
+    .fog-band.night {
+      background: linear-gradient(180deg, rgba(150, 180, 255, 0) 0%, rgba(150, 180, 255, 0.14) 100%);
+      opacity: 0.55;
+    }
+
+    /* PRADO Y FLORES */
+    .field-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 9;
+      pointer-events: none;
     }
     .flower-stem {
       position: absolute;
-      bottom: -20px;
+      bottom: -15px;
       transform-origin: bottom center;
       display: flex;
       flex-direction: column;
       align-items: center;
       will-change: transform;
+      animation: gentleWind 5.5s ease-in-out infinite alternate;
     }
-    .leaf {
-      position: absolute;
-      background: linear-gradient(135deg, #73d13d, #389e0d);
-      border-radius: 0 100% 0 100%;
+    @keyframes gentleWind {
+      0% { transform: rotate(-4.5deg); }
+      100% { transform: rotate(5.5deg); }
     }
-    .sway-breeze { animation: sway 5s ease-in-out infinite alternate; }
-    .pulse-heartbeat { animation: heartbeat 3s ease-in-out infinite alternate; }
-
-    @keyframes sway {
-      0% { transform: rotate(-5deg); }
-      100% { transform: rotate(6deg); }
+    .flower-pulse {
+      animation: heartbeat 3.2s ease-in-out infinite alternate;
     }
     @keyframes heartbeat {
       0%, 100% { transform: scale(1); }
       50% { transform: scale(1.05); }
     }
 
-    /* Subtítulos Amarillos */
+    .grass-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 9;
+      pointer-events: none;
+    }
+
+    /* ==============================================================
+       GIRASOL PROTAGONISTA (CORREGIDO: SIN CORTES NI BORDES CUADRADOS)
+       ============================================================== */
+    .hero-flower {
+      position: absolute;
+      bottom: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: clamp(170px, 22vw, 260px);
+      height: clamp(260px, 36vh, 380px);
+      z-index: 10;
+      pointer-events: none;
+      overflow: visible;
+      filter: drop-shadow(0 20px 22px rgba(0, 0, 0, 0.5));
+      transition: filter 4s ease;
+    }
+    .hero-flower svg {
+      overflow: visible;
+    }
+    .hero-flower.night-glow {
+      filter: drop-shadow(0 0 25px rgba(250, 219, 20, 0.35)) drop-shadow(0 20px 22px rgba(0, 0, 0, 0.65));
+    }
+    
+    .hero-bud-group {
+      transform-origin: 0 0;
+    }
+    .hero-petals-closed {
+      transform-origin: 0 0;
+      transition: opacity 2s ease, transform 2.6s cubic-bezier(0.34, 1.15, 0.4, 1);
+    }
+    .hero-petals-open {
+      opacity: 0;
+      transform: scale(0.35);
+      transform-origin: 0 0;
+      transition: opacity 2.4s ease 0.5s, transform 2.8s cubic-bezier(0.3, 1.3, 0.4, 1) 0.5s;
+    }
+    .hero-flower.bloomed .hero-petals-closed {
+      opacity: 0;
+      transform: scale(0.55);
+    }
+    .hero-flower.bloomed .hero-petals-open {
+      opacity: 1;
+      transform: scale(1);
+    }
+    .hero-stem {
+      transform-origin: 50% 100%;
+      transform: scaleY(0.9);
+      transition: transform 3s cubic-bezier(0.34, 1.1, 0.4, 1);
+    }
+    .hero-flower.bloomed .hero-stem {
+      transform: scaleY(1);
+    }
+    
+    /* El punto de giro está exactamente en la unión con el tallo (0, 0) */
+    .hero-flower-head {
+      transform-origin: 0 0;
+      animation: headSway 6.5s ease-in-out infinite alternate;
+    }
+    @keyframes headSway {
+      0% { transform: rotate(-2.5deg); }
+      100% { transform: rotate(2.5deg); }
+    }
+    .hero-flower.face-moon .hero-flower-head {
+      animation: none;
+      transition: transform 6.5s cubic-bezier(0.22, 1, 0.36, 1);
+      transform: rotate(-13deg);
+    }
+    .magical-sunflower-glow {
+      animation: flowerWarmPulse 3s ease-in-out infinite alternate;
+      transform-origin: center;
+    }
+    @keyframes flowerWarmPulse {
+      0% { filter: drop-shadow(0 0 6px rgba(250, 219, 20, 0.45)); }
+      100% { filter: drop-shadow(0 0 18px rgba(255, 235, 100, 0.9)); }
+    }
+
+    /* PANTALLA DE INICIO */
+    .start-gate {
+      position: absolute;
+      inset: 0;
+      z-index: 60;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 1.2rem;
+      background: radial-gradient(circle at center, #1b1305 0%, #060811 100%);
+      transition: opacity 1.2s ease, visibility 1.2s ease;
+    }
+    .start-gate.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .start-gate p {
+      color: #ffe58f;
+      font-size: 1.2rem;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      text-align: center;
+      line-height: 1.6;
+    }
+    .start-btn {
+      padding: 1.1rem 3.2rem;
+      border: none;
+      border-radius: 999px;
+      font-family: 'Quicksand', sans-serif;
+      font-weight: 700;
+      font-size: 1.15rem;
+      color: #3d2500;
+      background: linear-gradient(135deg, #fff566, #faad14);
+      box-shadow: 0 12px 35px rgba(250, 173, 20, 0.45);
+      cursor: pointer;
+      animation: pulseBtn 2s ease-in-out infinite;
+    }
+    @keyframes pulseBtn {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.06); }
+    }
+    .file-select-label {
+      font-size: 0.82rem;
+      color: #ffd591;
+      text-decoration: underline;
+      cursor: pointer;
+      opacity: 0.85;
+      margin-top: 6px;
+    }
+
+    /* CANVAS DE PARTÍCULAS */
+    canvas#particlesCanvas {
+      position: absolute;
+      inset: 0;
+      z-index: 12;
+      pointer-events: none;
+    }
+
+    /* ACABADO CINEMATOGRÁFICO */
+    .vignette {
+      position: absolute;
+      inset: 0;
+      z-index: 45;
+      pointer-events: none;
+      background: radial-gradient(ellipse at 50% 55%, rgba(0,0,0,0) 42%, rgba(0,0,0,0.25) 78%, rgba(0,0,0,0.52) 100%);
+    }
+    .grain-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 46;
+      pointer-events: none;
+      opacity: 0.055;
+      mix-blend-mode: overlay;
+    }
+
+    /* SUBTÍTULOS */
     .lyric-line {
       position: absolute;
-      top: 24%;
+      top: 22%;
       left: 50%;
       transform: translate(-50%, -50%) scale(0.95);
-      z-index: 15;
+      z-index: 20;
       color: #fff466;
       font-family: 'Quicksand', sans-serif;
-      font-size: clamp(1.4rem, 4vw, 2.3rem);
+      font-size: clamp(1.35rem, 3.8vw, 2.25rem);
       font-weight: 700;
       text-align: center;
       text-shadow: 0 0 14px rgba(250, 219, 20, 0.9),
                    0 0 28px rgba(212, 136, 6, 0.7),
-                   0 4px 12px rgba(0, 0, 0, 0.85);
+                   0 4px 12px rgba(0, 0, 0, 0.9);
       opacity: 0;
-      transition: opacity 0.35s ease, transform 0.35s ease;
+      transition: opacity 0.4s ease, transform 0.4s ease;
       pointer-events: none;
-      max-width: 85%;
+      max-width: 86%;
       line-height: 1.35;
     }
     .lyric-line.visible {
@@ -300,34 +522,32 @@
 
     .hint-tap {
       position: absolute;
-      bottom: 25px;
-      z-index: 20;
+      bottom: 22px;
+      z-index: 25;
       font-size: 0.85rem;
       letter-spacing: 1.5px;
       text-transform: uppercase;
       color: #ffe58f;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 1s ease;
-      text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+      transition: opacity 1.2s ease;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.9);
     }
-    .hint-tap.show { opacity: 0.65; }
+    .hint-tap.show { opacity: 0.8; }
 
-    /* ==================================================
-       MENSAJE FINAL Y DEDICATORIA DE ADRIÁN
-       ================================================== */
+    /* TARJETA FINAL DE ADRIÁN */
     .message-container {
       position: relative;
-      z-index: 25;
+      z-index: 35;
       text-align: center;
       opacity: 0;
-      transform: translateY(30px) scale(0.9);
+      transform: translateY(30px) scale(0.92);
       transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
       padding: 2.2rem 2.8rem;
       border-radius: 28px;
-      background: rgba(15, 20, 35, 0.82);
-      backdrop-filter: blur(16px);
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7),
+      background: rgba(10, 15, 30, 0.86);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8),
                   0 0 0 1px rgba(255, 235, 143, 0.35);
       max-width: 90%;
       pointer-events: none;
@@ -361,8 +581,6 @@
       color: #fdf3d6;
       max-width: 480px;
     }
-
-    /* Caja especial: Muñeco de Adrián con Corazón */
     .author-badge {
       display: flex;
       align-items: center;
@@ -374,28 +592,23 @@
       border-radius: 50px;
       border: 1px solid rgba(255, 245, 102, 0.25);
     }
-
     .cute-character {
-      width: 46px;
-      height: 46px;
+      width: 48px;
+      height: 48px;
       animation: charFloat 3s ease-in-out infinite alternate;
     }
-
     @keyframes charFloat {
       0% { transform: translateY(0px) rotate(-3deg); }
       100% { transform: translateY(-5px) rotate(3deg); }
     }
-
     .beating-heart {
       animation: heartPulse 1.2s infinite ease-in-out;
-      transform-origin: 32px 30px;
+      transform-origin: 32px 38px;
     }
-
     @keyframes heartPulse {
       0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.15); }
+      50% { transform: scale(1.2); }
     }
-
     .author-text {
       display: flex;
       flex-direction: column;
@@ -403,7 +616,7 @@
     }
     .author-name {
       font-family: 'Caveat', cursive;
-      font-size: 1.6rem;
+      font-size: 1.65rem;
       color: #FFF566;
       line-height: 1;
       text-shadow: 0 0 10px rgba(250, 219, 20, 0.5);
@@ -413,10 +626,9 @@
       color: #ffe58f;
       opacity: 0.9;
     }
-
     .replay-btn {
-      margin-top: 1.2rem;
-      padding: 0.75rem 2rem;
+      margin-top: 1.3rem;
+      padding: 0.8rem 2.4rem;
       border: none;
       border-radius: 999px;
       font-family: 'Quicksand', sans-serif;
@@ -427,113 +639,257 @@
       cursor: pointer;
       box-shadow: 0 8px 20px rgba(212, 136, 6, 0.35);
     }
+
+    @media (max-width: 650px) {
+      .hero-flower { bottom: 7%; }
+      .cinematic-moon { top: 7%; right: 7%; }
+      .message-container { padding: 1.6rem 1.6rem; }
+    }
   </style>
 </head>
 <body>
 
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="filmGrainFilter">
+    <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch" result="noise"/>
+    <feColorMatrix in="noise" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0 0.4 0"/>
+  </filter>
+</svg>
+
 <div class="viewport" id="stage">
 
+  <!-- PANTALLA INICIAL -->
   <div class="start-gate" id="startGate">
-    <p>Día de las Flores Amarillas<br>Experiencia Especial</p>
-    <button class="start-btn" id="startBtn" type="button">🌻 Toca para Iniciar</button>
+    <p>Día de las Flores Amarillas<br><span style="font-size: 0.92rem; letter-spacing: 1px; color:#fadb14;">Una historia de luz y amistad</span></p>
+    <button class="start-btn" id="startBtn" type="button">🌻 Vivir la Historia</button>
     <label class="file-select-label">
-      ¿Tienes el archivo MP3 en tu equipo? Haz clic aquí para seleccionarlo directamente
+      ¿Tienes el archivo MP3 en tu dispositivo? Haz clic aquí para seleccionarlo directamente
       <input type="file" id="audioFileInput" accept="audio/*" style="display: none;">
     </label>
   </div>
 
+  <!-- BOKEH INICIAL -->
   <div class="bokeh-bg" id="bokehBg">
-    <div class="orb" style="width: 300px; height: 300px; left: 10%; top: 20%;"></div>
-    <div class="orb" style="width: 250px; height: 250px; right: 15%; top: 50%; animation-delay: -3s;"></div>
+    <div class="orb" style="width: 320px; height: 320px; left: 8%; top: 18%;"></div>
+    <div class="orb" style="width: 260px; height: 260px; right: 12%; top: 48%; animation-delay: -3s;"></div>
   </div>
 
-  <div class="meadow-bg" id="meadowBg"></div>
-  <div class="night-bg" id="nightBg"></div>
-  <div class="night-veil" id="nightVeil"></div>
-  <div class="stars" id="starsLayer"></div>
-  <div class="moon" id="moon"></div>
-
-  <!-- Girasol -->
+  <!-- GIRASOL DE ENTRADA ROTATORIO -->
   <div class="intro-sunflower-container" id="introSunflower">
     <svg class="sunflower-svg" viewBox="0 0 200 200">
       <defs>
-        <radialGradient id="sunflowerCore" cx="50%" cy="50%" r="50%">
+        <radialGradient id="sunflowerCoreIntro" cx="50%" cy="50%" r="50%">
           <stop offset="0%" stop-color="#3d1e03" />
           <stop offset="70%" stop-color="#5c2e0b" />
           <stop offset="100%" stop-color="#2d1302" />
         </radialGradient>
-        <linearGradient id="petalGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+        <linearGradient id="petalGradIntro" x1="0%" y1="0%" x2="0%" y2="100%">
           <stop offset="0%" stop-color="#FFF566" />
           <stop offset="60%" stop-color="#FADB14" />
           <stop offset="100%" stop-color="#D48806" />
         </linearGradient>
       </defs>
       <g transform="translate(100, 100)">
-        <g id="petals">
-          <path d="M 0,-25 Q -14,-60 0,-95 Q 14,-60 0,-25" fill="url(#petalGrad)" transform="rotate(0)" />
-          <path d="M 0,-25 Q -14,-60 0,-95 Q 14,-60 0,-25" fill="url(#petalGrad)" transform="rotate(22.5)" />
-          <path d="M 0,-25 Q -14,-60 0,-95 Q 14,-60 0,-25" fill="url(#petalGrad)" transform="rotate(45)" />
-          <path d="M 0,-25 Q -14,-60 0,-95 Q 14,-60 0,-25" fill="url(#petalGrad)" transform="rotate(67.5)" />
-          <path d="M 0,-25 Q -14,-60 0,-95 Q 14,-60 0,-25" fill="url(#petalGrad)" transform="rotate(90)" />
-          <path d="M 0,-25 Q -14,-60 0,-95 Q 14,-60 0,-25" fill="url(#petalGrad)" transform="rotate(112.5)" />
-          <path d="M 0,-25 Q -14,-60 0,-95 Q 14,-60 0,-25" fill="url(#petalGrad)" transform="rotate(135)" />
-          <path d="M 0,-25 Q -14,-60 0,-95 Q 14,-60 0,-25" fill="url(#petalGrad)" transform="rotate(157.5)" />
-          <path d="M 0,-25 Q -14,-60 0,-95 Q 14,-60 0,-25" fill="url(#petalGrad)" transform="rotate(180)" />
-          <path d="M 0,-25 Q -14,-60 0,-95 Q 14,-60 0,-25" fill="url(#petalGrad)" transform="rotate(202.5)" />
-          <path d="M 0,-25 Q -14,-60 0,-95 Q 14,-60 0,-25" fill="url(#petalGrad)" transform="rotate(225)" />
-          <path d="M 0,-25 Q -14,-60 0,-95 Q 14,-60 0,-25" fill="url(#petalGrad)" transform="rotate(247.5)" />
-          <path d="M 0,-25 Q -14,-60 0,-95 Q 14,-60 0,-25" fill="url(#petalGrad)" transform="rotate(270)" />
-          <path d="M 0,-25 Q -14,-60 0,-95 Q 14,-60 0,-25" fill="url(#petalGrad)" transform="rotate(292.5)" />
-          <path d="M 0,-25 Q -14,-60 0,-95 Q 14,-60 0,-25" fill="url(#petalGrad)" transform="rotate(315)" />
-          <path d="M 0,-25 Q -14,-60 0,-95 Q 14,-60 0,-25" fill="url(#petalGrad)" transform="rotate(337.5)" />
+        <g id="introPetals">
+          <path d="M 0,-25 Q -14,-60 0,-95 Q 14,-60 0,-25" fill="url(#petalGradIntro)" transform="rotate(0)" />
+          <path d="M 0,-25 Q -14,-60 0,-95 Q 14,-60 0,-25" fill="url(#petalGradIntro)" transform="rotate(22.5)" />
+          <path d="M 0,-25 Q -14,-60 0,-95 Q 14,-60 0,-25" fill="url(#petalGradIntro)" transform="rotate(45)" />
+          <path d="M 0,-25 Q -14,-60 0,-95 Q 14,-60 0,-25" fill="url(#petalGradIntro)" transform="rotate(67.5)" />
+          <path d="M 0,-25 Q -14,-60 0,-95 Q 14,-60 0,-25" fill="url(#petalGradIntro)" transform="rotate(90)" />
+          <path d="M 0,-25 Q -14,-60 0,-95 Q 14,-60 0,-25" fill="url(#petalGradIntro)" transform="rotate(112.5)" />
+          <path d="M 0,-25 Q -14,-60 0,-95 Q 14,-60 0,-25" fill="url(#petalGradIntro)" transform="rotate(135)" />
+          <path d="M 0,-25 Q -14,-60 0,-95 Q 14,-60 0,-25" fill="url(#petalGradIntro)" transform="rotate(157.5)" />
+          <path d="M 0,-25 Q -14,-60 0,-95 Q 14,-60 0,-25" fill="url(#petalGradIntro)" transform="rotate(180)" />
+          <path d="M 0,-25 Q -14,-60 0,-95 Q 14,-60 0,-25" fill="url(#petalGradIntro)" transform="rotate(202.5)" />
+          <path d="M 0,-25 Q -14,-60 0,-95 Q 14,-60 0,-25" fill="url(#petalGradIntro)" transform="rotate(225)" />
+          <path d="M 0,-25 Q -14,-60 0,-95 Q 14,-60 0,-25" fill="url(#petalGradIntro)" transform="rotate(247.5)" />
+          <path d="M 0,-25 Q -14,-60 0,-95 Q 14,-60 0,-25" fill="url(#petalGradIntro)" transform="rotate(270)" />
+          <path d="M 0,-25 Q -14,-60 0,-95 Q 14,-60 0,-25" fill="url(#petalGradIntro)" transform="rotate(292.5)" />
+          <path d="M 0,-25 Q -14,-60 0,-95 Q 14,-60 0,-25" fill="url(#petalGradIntro)" transform="rotate(315)" />
+          <path d="M 0,-25 Q -14,-60 0,-95 Q 14,-60 0,-25" fill="url(#petalGradIntro)" transform="rotate(337.5)" />
         </g>
-        <circle cx="0" cy="0" r="32" fill="url(#sunflowerCore)" />
+        <circle cx="0" cy="0" r="32" fill="url(#sunflowerCoreIntro)" />
         <circle cx="0" cy="0" r="28" fill="none" stroke="#683908" stroke-dasharray="3,3" stroke-width="2" />
         <circle cx="0" cy="0" r="18" fill="none" stroke="#faad14" stroke-dasharray="2,4" stroke-width="1.5" opacity="0.6"/>
       </g>
     </svg>
   </div>
 
-  <div class="field-container" id="flowerField"></div>
-  <canvas id="particles"></canvas>
+  <!-- CÁMARA CINEMATOGRÁFICA -->
+  <div class="cinema-camera" id="cameraRig">
 
-  <!-- Subtítulos -->
+    <!-- CIELO -->
+    <div class="sky-sunset" id="skySunset"></div>
+    <div class="sky-twilight" id="skyTwilight"></div>
+    <div class="sky-night" id="skyNight"></div>
+
+    <!-- SOL -->
+    <div class="cinematic-sun" id="cinemaSun"></div>
+
+    <!-- NUBES -->
+    <div class="clouds-layer" id="cloudsLayer">
+      <div class="cloud" style="width:220px; height:70px; top:16%; left:8%; animation-duration:110s;"></div>
+      <div class="cloud" style="width:160px; height:55px; top:24%; left:55%; animation-duration:85s; animation-delay:-20s;"></div>
+      <div class="cloud" style="width:190px; height:60px; top:11%; left:68%; animation-duration:130s; animation-delay:-60s;"></div>
+    </div>
+
+    <!-- ESTRELLAS -->
+    <div class="stars-layer" id="starsLayer"></div>
+
+    <!-- LUNA -->
+    <div class="cinematic-moon" id="cinemaMoon">
+      <div class="moon-crater" style="width: 22%; height: 22%; top: 26%; left: 24%;"></div>
+      <div class="moon-crater" style="width: 15%; height: 15%; top: 52%; left: 32%;"></div>
+      <div class="moon-crater" style="width: 18%; height: 18%; top: 38%; left: 56%;"></div>
+    </div>
+
+    <!-- COLINAS Y NIEBLA -->
+    <div class="hills-far" id="hillsFar"></div>
+    <div class="fog-band" id="fogBandFar" style="bottom: 20%; z-index: 5;"></div>
+    <div class="hills-mid" id="hillsMid"></div>
+    <div class="fog-band" id="fogBandMid" style="bottom: 12%; z-index: 6;"></div>
+    <div class="hills-near" id="hillsNear"></div>
+
+    <!-- PASTO Y FLORES -->
+    <div class="grass-layer" id="grassLayer"></div>
+    <div class="field-layer" id="flowerMeadow"></div>
+
+    <!-- GIRASOL PROTAGONISTA -->
+    <div class="hero-flower" id="heroFlower">
+      <svg viewBox="-80 -50 360 410" preserveAspectRatio="xMidYMax meet" width="100%" height="100%">
+        <defs>
+          <linearGradient id="heroStemGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#8fd14f"/>
+            <stop offset="45%" stop-color="#4a9a1f"/>
+            <stop offset="100%" stop-color="#2c6b10"/>
+          </linearGradient>
+          <linearGradient id="heroLeafGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#8ed158"/>
+            <stop offset="100%" stop-color="#357a1a"/>
+          </linearGradient>
+          <radialGradient id="heroPetalGrad" cx="50%" cy="28%" r="78%">
+            <stop offset="0%" stop-color="#FFFAD2"/>
+            <stop offset="42%" stop-color="#FFE066"/>
+            <stop offset="100%" stop-color="#D4A017"/>
+          </radialGradient>
+          <radialGradient id="heroDiscGrad" cx="40%" cy="35%" r="68%">
+            <stop offset="0%" stop-color="#8a5a24"/>
+            <stop offset="55%" stop-color="#4a2c0d"/>
+            <stop offset="100%" stop-color="#241304"/>
+          </radialGradient>
+        </defs>
+
+        <!-- Sombra en la base -->
+        <ellipse cx="100" cy="340" rx="55" ry="10" fill="rgba(10,10,5,0.45)" filter="blur(4px)"/>
+
+        <!-- Tallo con hojas -->
+        <g class="hero-stem">
+          <path d="M100 340 C 96 260, 98 175, 100 95" stroke="url(#heroStemGrad)" stroke-width="9" fill="none" stroke-linecap="round"/>
+          <path d="M102 340 C 98 260, 100 175, 101 95" stroke="#dff2b8" stroke-width="1.6" fill="none" opacity="0.45"/>
+          <path d="M100 250 C 78 239, 56 245, 42 268 C 65 268, 86 262, 100 257 Z" fill="url(#heroLeafGrad)"/>
+          <path d="M50 264 C 65 260, 82 257, 98 253" stroke="#2c6b10" stroke-width="1.3" fill="none" opacity="0.55"/>
+          <path d="M104 188 C 123 180, 141 187, 151 205 C 133 203, 116 199, 104 194 Z" fill="url(#heroLeafGrad)" opacity="0.95"/>
+          <path d="M110 198 C 123 195, 137 193, 147 192" stroke="#2c6b10" stroke-width="1.1" fill="none" opacity="0.55"/>
+        </g>
+
+        <!-- Cabeza floral centrada exactamente en el extremo del tallo (100, 95) -->
+        <g class="hero-bud-group" transform="translate(100, 95)">
+
+          <!-- ESTADO CAPULLO -->
+          <g class="hero-petals-closed">
+            <path d="M0 -36 C 17 -32 23 -12 16 7 C 8 21 -8 21 -16 7 C -23 -12 -17 -32 0 -36 Z" fill="url(#heroLeafGrad)"/>
+            <path d="M0 -31 C 12 -28 17 -13 11 2 C 6 13 -6 13 -11 2 C -17 -13 -12 -28 0 -31 Z" fill="#a9d97a" opacity="0.85"/>
+            <path d="M0 -28 L 0 4" stroke="#357a1a" stroke-width="1" opacity="0.4"/>
+          </g>
+
+          <!-- ESTADO FLOR ABIERTA -->
+          <g class="hero-petals-open">
+            <g class="hero-flower-head">
+              <g class="magical-sunflower-glow">
+
+                <!-- Capa posterior de pétalos -->
+                <g opacity="0.92">
+                  <ellipse cx="0" cy="-47" rx="12" ry="33" fill="#D4A017" transform="rotate(15)"/>
+                  <ellipse cx="0" cy="-47" rx="12" ry="33" fill="#D4A017" transform="rotate(45)"/>
+                  <ellipse cx="0" cy="-47" rx="12" ry="33" fill="#D4A017" transform="rotate(75)"/>
+                  <ellipse cx="0" cy="-47" rx="12" ry="33" fill="#D4A017" transform="rotate(105)"/>
+                  <ellipse cx="0" cy="-47" rx="12" ry="33" fill="#D4A017" transform="rotate(135)"/>
+                  <ellipse cx="0" cy="-47" rx="12" ry="33" fill="#D4A017" transform="rotate(165)"/>
+                  <ellipse cx="0" cy="-47" rx="12" ry="33" fill="#D4A017" transform="rotate(195)"/>
+                  <ellipse cx="0" cy="-47" rx="12" ry="33" fill="#D4A017" transform="rotate(225)"/>
+                  <ellipse cx="0" cy="-47" rx="12" ry="33" fill="#D4A017" transform="rotate(255)"/>
+                  <ellipse cx="0" cy="-47" rx="12" ry="33" fill="#D4A017" transform="rotate(285)"/>
+                  <ellipse cx="0" cy="-47" rx="12" ry="33" fill="#D4A017" transform="rotate(315)"/>
+                  <ellipse cx="0" cy="-47" rx="12" ry="33" fill="#D4A017" transform="rotate(345)"/>
+                </g>
+
+                <!-- Capa frontal de pétalos -->
+                <g>
+                  <ellipse cx="0" cy="-44" rx="10.5" ry="30" fill="url(#heroPetalGrad)" stroke="#b8790a" stroke-width="0.5" opacity="0.55" transform="rotate(0)"/>
+                  <ellipse cx="0" cy="-44" rx="10.5" ry="30" fill="url(#heroPetalGrad)" stroke="#b8790a" stroke-width="0.5" opacity="0.55" transform="rotate(30)"/>
+                  <ellipse cx="0" cy="-44" rx="10.5" ry="30" fill="url(#heroPetalGrad)" stroke="#b8790a" stroke-width="0.5" opacity="0.55" transform="rotate(60)"/>
+                  <ellipse cx="0" cy="-44" rx="10.5" ry="30" fill="url(#heroPetalGrad)" stroke="#b8790a" stroke-width="0.5" opacity="0.55" transform="rotate(90)"/>
+                  <ellipse cx="0" cy="-44" rx="10.5" ry="30" fill="url(#heroPetalGrad)" stroke="#b8790a" stroke-width="0.5" opacity="0.55" transform="rotate(120)"/>
+                  <ellipse cx="0" cy="-44" rx="10.5" ry="30" fill="url(#heroPetalGrad)" stroke="#b8790a" stroke-width="0.5" opacity="0.55" transform="rotate(150)"/>
+                  <ellipse cx="0" cy="-44" rx="10.5" ry="30" fill="url(#heroPetalGrad)" stroke="#b8790a" stroke-width="0.5" opacity="0.55" transform="rotate(180)"/>
+                  <ellipse cx="0" cy="-44" rx="10.5" ry="30" fill="url(#heroPetalGrad)" stroke="#b8790a" stroke-width="0.5" opacity="0.55" transform="rotate(210)"/>
+                  <ellipse cx="0" cy="-44" rx="10.5" ry="30" fill="url(#heroPetalGrad)" stroke="#b8790a" stroke-width="0.5" opacity="0.55" transform="rotate(240)"/>
+                  <ellipse cx="0" cy="-44" rx="10.5" ry="30" fill="url(#heroPetalGrad)" stroke="#b8790a" stroke-width="0.5" opacity="0.55" transform="rotate(270)"/>
+                  <ellipse cx="0" cy="-44" rx="10.5" ry="30" fill="url(#heroPetalGrad)" stroke="#b8790a" stroke-width="0.5" opacity="0.55" transform="rotate(300)"/>
+                  <ellipse cx="0" cy="-44" rx="10.5" ry="30" fill="url(#heroPetalGrad)" stroke="#b8790a" stroke-width="0.5" opacity="0.55" transform="rotate(330)"/>
+                  <path d="M0 -20 L 0 -68" stroke="#FFFAD2" stroke-width="1.4" opacity="0.55" transform="rotate(0)"/>
+                  <path d="M0 -20 L 0 -68" stroke="#FFFAD2" stroke-width="1.4" opacity="0.4" transform="rotate(120)"/>
+                  <path d="M0 -20 L 0 -68" stroke="#FFFAD2" stroke-width="1.4" opacity="0.4" transform="rotate(240)"/>
+                </g>
+
+                <!-- Disco central del girasol -->
+                <circle cx="0" cy="0" r="27" fill="url(#heroDiscGrad)"/>
+                <circle cx="0" cy="0" r="27" fill="none" stroke="#1c0f04" stroke-width="1" opacity="0.5"/>
+                <circle cx="0" cy="0" r="9" fill="none" stroke="#1c0f04" stroke-width="1.6" stroke-dasharray="1.6 1.8" opacity="0.65"/>
+                <circle cx="0" cy="0" r="15.5" fill="none" stroke="#1c0f04" stroke-width="1.6" stroke-dasharray="1.8 2" opacity="0.6"/>
+                <circle cx="0" cy="0" r="21.5" fill="none" stroke="#1c0f04" stroke-width="1.6" stroke-dasharray="2 2.2" opacity="0.55"/>
+                <ellipse cx="-8" cy="-10" rx="9" ry="5.5" fill="#a97a3a" opacity="0.4"/>
+              </g>
+            </g>
+          </g>
+        </g>
+      </svg>
+    </div>
+
+  </div>
+
+  <!-- CANVAS DE PARTÍCULAS -->
+  <canvas id="particlesCanvas"></canvas>
+
+  <!-- VIÑETA Y GRANO DE PELÍCULA -->
+  <div class="vignette"></div>
+  <div class="grain-overlay" style="filter: url(#filmGrainFilter);"></div>
+
+  <!-- SUBTÍTULOS -->
   <div class="lyric-line" id="lyricLine"></div>
   <div class="hint-tap" id="hintTap">Toca 2 veces en cualquier lugar para ver el mensaje</div>
 
-  <!-- Mensaje Final con Muñeco de Adrián -->
+  <!-- TARJETA FINAL DE ADRIÁN -->
   <div class="message-container" id="message">
     <div class="tagline">Una promesa dorada</div>
     <h1 class="title">¡Feliz Día de las Flores Amarillas!</h1>
-    <p class="subtitle">Que la alegría, la luz y los mejores momentos iluminen tu camino hoy y siempre.</p>
+    <p class="subtitle">Que la alegría, la luz y los momentos más hermosos iluminen tu camino hoy y siempre.</p>
 
-    <!-- Muñeco tierno con corazón -->
     <div class="author-badge">
       <svg class="cute-character" viewBox="0 0 64 64">
-        <!-- Orejitas -->
         <circle cx="18" cy="18" r="8" fill="#ffe58f" />
         <circle cx="46" cy="18" r="8" fill="#ffe58f" />
         <circle cx="18" cy="18" r="4.5" fill="#ffbb96" />
         <circle cx="46" cy="18" r="4.5" fill="#ffbb96" />
-        
-        <!-- Cabeza y cuerpo -->
         <circle cx="32" cy="34" r="22" fill="#fffbe6" stroke="#faad14" stroke-width="1.5"/>
-        
-        <!-- Ojos sonrientes -->
         <circle cx="25" cy="30" r="2.2" fill="#3d2500" />
         <circle cx="39" cy="30" r="2.2" fill="#3d2500" />
-        <!-- Mejillas sonrojadas -->
         <ellipse cx="21" cy="35" rx="3.5" ry="2" fill="#ff7875" opacity="0.75" />
         <ellipse cx="43" cy="35" rx="3.5" ry="2" fill="#ff7875" opacity="0.75" />
-        <!-- Boca feliz -->
         <path d="M 29 36 Q 32 40 35 36" fill="none" stroke="#3d2500" stroke-width="1.8" stroke-linecap="round"/>
-
-        <!-- Corazón latiendo entre sus manitas -->
         <g class="beating-heart">
           <path d="M 32,38 A 4,4 0 0,0 26,34 A 4,4 0 0,0 24,38 Q 24,43 32,48 Q 40,43 40,38 A 4,4 0 0,0 38,34 A 4,4 0 0,0 32,38 Z" fill="#ff4d4f" />
         </g>
-        
-        <!-- Manitas sosteniendo el corazón -->
         <circle cx="23" cy="40" r="3.2" fill="#fffbe6" stroke="#faad14" stroke-width="1.2"/>
         <circle cx="41" cy="40" r="3.2" fill="#fffbe6" stroke="#faad14" stroke-width="1.2"/>
       </svg>
@@ -552,7 +908,7 @@
 </div>
 
 <script>
-  /* SUBTÍTULOS */
+  /* SUBTÍTULOS SINCRONIZADOS */
   const lyricCues = [
     { start: 3, end: 16, text: "Ooooh... 🎶" },
     { start: 17, end: 21, text: "Hay un mundo, mil planetas que vienen y van..." },
@@ -586,51 +942,92 @@
     { start: 210, end: 218, text: "¡Cuenta conmigo por favor! 💛" }
   ];
 
-  /* PARTÍCULAS LENTAS */
-  const canvas = document.getElementById('particles');
+  /* SISTEMA DE PARTÍCULAS */
+  const canvas = document.getElementById('particlesCanvas');
   const ctx = canvas.getContext('2d');
   let width, height;
   let particles = [];
-  let gentleFallInterval = null;
+  let petals = [];
+  let currentEnvironment = 'sunset';
+  let gentlePetalTimer = null;
 
-  function resize() {
+  function resizeCanvas() {
     width = canvas.width = window.innerWidth;
     height = canvas.height = window.innerHeight;
   }
-  window.addEventListener('resize', resize);
-  resize();
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
 
-  class Particle {
+  class LightParticle {
+    constructor() { this.reset(); }
+    reset() {
+      this.x = Math.random() * width;
+      this.y = Math.random() * height;
+      this.size = Math.random() * 2.4 + 1.2;
+      this.vx = (Math.random() - 0.5) * 0.4;
+      this.vy = -(Math.random() * 0.4 + 0.15);
+      this.alpha = Math.random() * 0.6 + 0.2;
+      this.pulseSpeed = Math.random() * 0.02 + 0.01;
+      this.pulse = Math.random() * Math.PI;
+    }
+    update() {
+      this.x += this.vx;
+      this.y += this.vy;
+      this.pulse += this.pulseSpeed;
+      if (this.y < -10 || this.x < -10 || this.x > width + 10) {
+        this.reset();
+        this.y = height + 10;
+      }
+    }
+    draw() {
+      const currentAlpha = Math.max(0, this.alpha * Math.sin(this.pulse));
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+
+      if (currentEnvironment === 'sunset') {
+        ctx.fillStyle = `rgba(255, 235, 140, ${currentAlpha})`;
+        ctx.shadowColor = 'rgba(250, 173, 20, 0.6)';
+        ctx.shadowBlur = 8;
+      } else {
+        ctx.fillStyle = `rgba(230, 255, 170, ${currentAlpha * 1.2})`;
+        ctx.shadowColor = 'rgba(180, 255, 100, 0.85)';
+        ctx.shadowBlur = 12;
+      }
+      ctx.fill();
+      ctx.restore();
+    }
+  }
+
+  class PetalParticle {
     constructor(x, y, mode = 'burst') {
       this.x = x || Math.random() * width;
-      this.y = y || (mode === 'burst' ? height / 2 : -30);
+      this.y = y || (mode === 'burst' ? height / 2 : -25);
       this.mode = mode;
 
       if (mode === 'burst') {
-        const angle = -Math.PI / 2 + (Math.random() - 0.5) * 2.2;
-        const speed = 2.5 + Math.random() * 4.5;
+        const angle = -Math.PI / 2 + (Math.random() - 0.5) * 2.4;
+        const speed = 3.5 + Math.random() * 5.5;
         this.vx = Math.cos(angle) * speed;
         this.vy = Math.sin(angle) * speed;
-        this.size = 10 + Math.random() * 14;
+        this.size = 10 + Math.random() * 12;
         this.alpha = 1;
-        this.gravity = -0.02;
+        this.gravity = -0.015;
         this.drag = 0.985;
       } else {
         this.x = Math.random() * width;
-        this.y = -30;
-        this.vx = (Math.random() - 0.5) * 0.5;
-        this.vy = 0.3 + Math.random() * 0.4;
-        this.size = 9 + Math.random() * 11;
+        this.y = -25;
+        this.vx = (Math.random() - 0.5) * 0.6;
+        this.vy = 0.4 + Math.random() * 0.5;
+        this.size = 9 + Math.random() * 9;
         this.alpha = 0.85;
         this.gravity = 0.001;
         this.drag = 0.998;
       }
-
       this.rotation = Math.random() * Math.PI * 2;
-      this.vRot = (Math.random() - 0.5) * 0.03;
-      this.color = Math.random() > 0.3 ? '#FADB14' : '#FFE58F';
+      this.vRot = (Math.random() - 0.5) * 0.035;
+      this.color = Math.random() > 0.35 ? '#FADB14' : '#FFE58F';
     }
-
     update() {
       this.vx *= this.drag;
       this.vy += this.gravity;
@@ -639,14 +1036,13 @@
       this.rotation += this.vRot;
 
       if (this.mode === 'burst') {
-        this.alpha -= 0.006;
-      } else if (this.y > height + 40) {
-        this.y = -30;
+        this.alpha -= 0.007;
+      } else if (this.y > height + 35) {
+        this.y = -25;
         this.x = Math.random() * width;
-        this.vy = 0.3 + Math.random() * 0.4;
+        this.vy = 0.4 + Math.random() * 0.45;
       }
     }
-
     draw() {
       if (this.alpha <= 0) return;
       ctx.save();
@@ -654,7 +1050,7 @@
       ctx.rotate(this.rotation);
       ctx.globalAlpha = Math.max(this.alpha, 0);
       ctx.fillStyle = this.color;
-      ctx.shadowBlur = 10;
+      ctx.shadowBlur = 8;
       ctx.shadowColor = 'rgba(250, 219, 20, 0.4)';
       ctx.beginPath();
       ctx.moveTo(0, 0);
@@ -665,110 +1061,191 @@
     }
   }
 
-  function triggerBurst() {
-    for (let i = 0; i < 90; i++) {
-      particles.push(new Particle(width / 2, height / 2, 'burst'));
+  function triggerPetalBurst() {
+    for (let i = 0; i < 85; i++) {
+      petals.push(new PetalParticle(width / 2, height / 2, 'burst'));
     }
   }
 
-  function initGentleFall() {
-    gentleFallInterval = setInterval(() => {
-      if (particles.length < 60) {
-        particles.push(new Particle(null, null, 'gentle'));
+  function initGentlePetals() {
+    if (gentlePetalTimer) clearInterval(gentlePetalTimer);
+    gentlePetalTimer = setInterval(() => {
+      if (petals.length < 50) {
+        petals.push(new PetalParticle(null, null, 'gentle'));
       }
-    }, 450);
+    }, 500);
   }
 
-  function animateParticles() {
+  function initParticles() {
+    particles = [];
+    const count = Math.floor(window.innerWidth / 24);
+    for (let i = 0; i < count; i++) {
+      particles.push(new LightParticle());
+    }
+  }
+  initParticles();
+
+  function renderAllParticles() {
     ctx.clearRect(0, 0, width, height);
-    for (let i = particles.length - 1; i >= 0; i--) {
-      particles[i].update();
-      particles[i].draw();
-      if (particles[i].mode === 'burst' && particles[i].alpha <= 0) {
-        particles.splice(i, 1);
+
+    for (let p of particles) {
+      p.update();
+      p.draw();
+    }
+    for (let i = petals.length - 1; i >= 0; i--) {
+      petals[i].update();
+      petals[i].draw();
+      if (petals[i].mode === 'burst' && petals[i].alpha <= 0) {
+        petals.splice(i, 1);
       }
     }
-    requestAnimationFrame(animateParticles);
+    requestAnimationFrame(renderAllParticles);
   }
-  animateParticles();
+  renderAllParticles();
 
-  /* GENERACIÓN DE FLORES */
-  function createStars() {
-    const layer = document.getElementById('starsLayer');
-    layer.innerHTML = '';
-    for (let i = 0; i < 60; i++) {
+  /* PAISAJE */
+  function populateStars() {
+    const starLayer = document.getElementById('starsLayer');
+    starLayer.innerHTML = '';
+
+    const band = document.createElement('div');
+    band.style.position = 'absolute';
+    band.style.inset = '0';
+    band.style.background = 'linear-gradient(115deg, rgba(180,200,255,0) 34%, rgba(205,215,255,0.05) 47%, rgba(225,230,255,0.09) 52%, rgba(180,200,255,0) 66%)';
+    band.style.mixBlendMode = 'screen';
+    starLayer.appendChild(band);
+
+    const starCount = Math.floor(window.innerWidth / 13);
+    const starColors = ['#ffffff', '#ffffff', '#fff6e0', '#e8f0ff', '#ffffff'];
+
+    for (let i = 0; i < starCount; i++) {
       const star = document.createElement('div');
       star.className = 'star';
-      const size = 1 + Math.random() * 2;
+      const isBright = Math.random() < 0.07;
+      const size = isBright ? (Math.random() * 1.5 + 2.4) : (Math.random() * 1.5 + 0.6);
+      const color = starColors[Math.floor(Math.random() * starColors.length)];
       star.style.width = `${size}px`;
       star.style.height = `${size}px`;
       star.style.left = `${Math.random() * 100}%`;
-      star.style.top = `${Math.random() * 70}%`;
-      star.style.animationDelay = `${Math.random() * -3}s`;
-      layer.appendChild(star);
+      star.style.top = `${Math.random() * 68}%`;
+      star.style.background = color;
+      star.style.animationDelay = `${Math.random() * -4}s`;
+      star.style.animationDuration = `${2.5 + Math.random() * 2.5}s`;
+      if (isBright) {
+        star.style.boxShadow = `0 0 ${(size * 2.5).toFixed(1)}px ${(size * 0.9).toFixed(1)}px rgba(255,255,255,0.5)`;
+      }
+      starLayer.appendChild(star);
     }
   }
 
-  const flowerSVGs = {
-    daisy: (color) => `
-      <svg width="80" height="80" viewBox="0 0 100 100">
-        <g transform="translate(50,50)">
-          ${[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map(deg =>
-            `<ellipse cx="0" cy="-28" rx="8" ry="20" fill="${color}" transform="rotate(${deg})" opacity="0.95"/>`
-          ).join('')}
-          <circle cx="0" cy="0" r="14" fill="#D48806" />
-        </g>
-      </svg>
-    `,
-    tulip: (color) => `
-      <svg width="70" height="80" viewBox="0 0 70 80">
-        <path d="M35 15 C10 15, 10 65, 35 75 C60 65, 60 15, 35 15 Z" fill="${color}" />
-        <path d="M35 25 C20 25, 15 50, 35 70 C55 50, 50 25, 35 25 Z" fill="#FFF566" opacity="0.7"/>
-      </svg>
-    `
-  };
+  function buildFlowerMeadow() {
+    const meadow = document.getElementById('flowerMeadow');
+    meadow.innerHTML = '';
+    const flowerCount = Math.floor(window.innerWidth / 48);
 
-  function createMeadow() {
-    const container = document.getElementById('flowerField');
-    container.innerHTML = '';
-    const flowersCount = Math.floor(window.innerWidth / 75);
-    const flowerTypes = ['daisy', 'tulip'];
-    const colors = ['#FFF566', '#FADB14', '#FFD666', '#FFF082'];
+    const flowerSVGs = {
+      daisy: (c) => `
+        <svg width="65" height="65" viewBox="0 0 100 100">
+          <g transform="translate(50,50)" opacity="0.85">
+            ${[18, 54, 90, 126, 162, 198, 234, 270, 306, 342].map(deg =>
+              `<ellipse cx="0" cy="-25" rx="7.5" ry="18.5" fill="${c.dark}" transform="rotate(${deg})"/>`
+            ).join('')}
+          </g>
+          <g transform="translate(50,50)">
+            ${[0, 36, 72, 108, 144, 180, 216, 252, 288, 324].map(deg =>
+              `<ellipse cx="0" cy="-26" rx="7" ry="18" fill="${c.mid}" transform="rotate(${deg})" opacity="0.95"/>`
+            ).join('')}
+            <circle cx="0" cy="0" r="13" fill="#5c3a10"/>
+            <circle cx="0" cy="0" r="13" fill="none" stroke="#2c1806" stroke-width="0.8" opacity="0.5"/>
+            <circle cx="0" cy="0" r="5" fill="none" stroke="#2c1806" stroke-width="1" stroke-dasharray="1 1.2" opacity="0.6"/>
+            <circle cx="0" cy="0" r="9" fill="none" stroke="#2c1806" stroke-width="1" stroke-dasharray="1.2 1.4" opacity="0.55"/>
+            <ellipse cx="-4" cy="-5" rx="4" ry="2.4" fill="${c.light}" opacity="0.3"/>
+          </g>
+        </svg>
+      `,
+      tulip: (c) => `
+        <svg width="55" height="65" viewBox="0 0 70 80">
+          <path d="M35 15 C10 15, 10 65, 35 75 C60 65, 60 15, 35 15 Z" fill="${c.mid}" />
+          <path d="M35 25 C20 25, 15 50, 35 70 C55 50, 50 25, 35 25 Z" fill="${c.light}" opacity="0.75"/>
+        </svg>
+      `
+    };
 
-    for (let i = 0; i < flowersCount; i++) {
-      const stemWrapper = document.createElement('div');
-      stemWrapper.className = 'flower-stem sway-breeze';
+    const flowerColors = [
+      { light: '#FFF9C4', mid: '#FADB14', dark: '#C98A0A' },
+      { light: '#FFF566', mid: '#FFD666', dark: '#D4A017' },
+      { light: '#FFFAD2', mid: '#FFF082', dark: '#D48806' },
+      { light: '#FFF9C4', mid: '#FADB14', dark: '#B8790A' }
+    ];
 
-      const leftPos = (i / flowersCount) * 100 + (Math.random() * 4 - 2);
-      const scale = 0.55 + Math.random() * 0.55;
-      const heightStem = 80 + Math.random() * 120;
-      const type = flowerTypes[Math.floor(Math.random() * flowerTypes.length)];
-      const color = colors[Math.floor(Math.random() * colors.length)];
-      const leafSide = Math.random() > 0.5 ? 1 : -1;
+    for (let i = 0; i < flowerCount; i++) {
+      const stem = document.createElement('div');
+      stem.className = 'flower-stem';
 
-      stemWrapper.style.left = `${leftPos}%`;
-      stemWrapper.style.zIndex = Math.floor(scale * 10);
-      stemWrapper.style.transform = `scale(${scale})`;
-      stemWrapper.style.animationDelay = `${Math.random() * -6}s`;
+      const left = (i / flowerCount) * 105 - 2.5 + (Math.random() * 3 - 1.5);
+      const scale = 0.55 + Math.random() * 0.65;
+      const heightStem = 80 + Math.random() * 105;
+      const c = flowerColors[Math.floor(Math.random() * flowerColors.length)];
+      const type = Math.random() > 0.3 ? 'daisy' : 'tulip';
+      const bob = Math.random() * 10 - 6;
 
-      stemWrapper.innerHTML = `
-        <div class="pulse-heartbeat" style="animation-delay: ${Math.random() * -3}s">
-          ${flowerSVGs[type](color)}
+      stem.style.left = `${left}%`;
+      stem.style.bottom = `${-15 + bob}px`;
+      stem.style.zIndex = Math.floor(scale * 10);
+      stem.style.transform = `scale(${scale})`;
+      stem.style.animationDelay = `${Math.random() * -6}s`;
+      stem.style.filter = `drop-shadow(0 ${(4 + scale * 6).toFixed(1)}px ${(3 + scale * 3).toFixed(1)}px rgba(20,15,5,${(0.22 + scale * 0.18).toFixed(2)}))`;
+
+      stem.innerHTML = `
+        <div class="flower-pulse" style="animation-delay: ${Math.random() * -3}s">
+          ${flowerSVGs[type](c)}
         </div>
-        <div style="position: relative; width: 5px; height: ${heightStem}px; background: linear-gradient(to bottom, #73d13d, #237804); border-radius: 4px; margin-top: -10px;">
-          <div class="leaf" style="width: 22px; height: 14px; top: ${heightStem * 0.4}px; left: ${leafSide === 1 ? '3px' : '-20px'}; transform: rotate(${leafSide === 1 ? 20 : -20}deg);"></div>
+        <div style="position: relative; width: 4.5px; height: ${heightStem}px; background: linear-gradient(to bottom, #73d13d, #237804); border-radius: 4px; margin-top: -8px; box-shadow: 1px 0 0 rgba(255,255,255,0.15) inset;">
+          <div style="position: absolute; width: 18px; height: 11px; background: linear-gradient(135deg, #73d13d, #389e0d); border-radius: 0 100% 0 100%; top: 38%; left: 3px; transform: rotate(20deg);"></div>
         </div>
       `;
-      container.appendChild(stemWrapper);
+      meadow.appendChild(stem);
+    }
+  }
+
+  function buildGrassTufts() {
+    const grass = document.getElementById('grassLayer');
+    grass.innerHTML = '';
+    const tuftCount = Math.floor(window.innerWidth / 18);
+    const shades = ['#1e3a0f', '#28480f', '#173109', '#2f5312'];
+
+    for (let i = 0; i < tuftCount; i++) {
+      const left = Math.random() * 104 - 2;
+      const h = 18 + Math.random() * 26;
+      const w = 14 + Math.random() * 10;
+      const shade = shades[Math.floor(Math.random() * shades.length)];
+      const lean = (Math.random() * 10 - 5).toFixed(1);
+
+      const tuft = document.createElement('div');
+      tuft.style.position = 'absolute';
+      tuft.style.left = `${left}%`;
+      tuft.style.bottom = `${(Math.random() * 3 - 2).toFixed(1)}%`;
+      tuft.style.width = `${w}px`;
+      tuft.style.height = `${h}px`;
+      tuft.style.zIndex = `${Math.floor(Math.random() * 3)}`;
+      tuft.innerHTML = `
+        <svg width="${w}" height="${h}" viewBox="0 0 20 30" style="transform: rotate(${lean}deg)">
+          <path d="M3 30 C 2 18, 6 8, 9 0" stroke="${shade}" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <path d="M10 30 C 10 16, 11 6, 10 -2" stroke="${shade}" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <path d="M16 30 C 15 20, 12 10, 8 2" stroke="${shade}" stroke-width="2" fill="none" stroke-linecap="round"/>
+        </svg>
+      `;
+      grass.appendChild(tuft);
     }
   }
 
   /* SUBTÍTULOS Y AUDIO */
   const bgMusic = document.getElementById('bgMusic');
   const lyricEl = document.getElementById('lyricLine');
+  let lyricsInterval = null;
   let activeCue = null;
-  let lyricsTimer = null;
   let songStartTime = null;
+  let isMessageShown = false;
 
   document.getElementById('audioFileInput').addEventListener('change', function(e) {
     const file = e.target.files[0];
@@ -780,7 +1257,7 @@
 
   function startLyricsClock() {
     songStartTime = Date.now();
-    lyricsTimer = setInterval(() => {
+    lyricsInterval = setInterval(() => {
       if (isMessageShown) return;
 
       let currentTime = (Date.now() - songStartTime) / 1000;
@@ -798,28 +1275,22 @@
           lyricEl.classList.remove('visible');
         }
       }
-    }, 200);
+    }, 180);
   }
-
-  /* MENSAJE FINAL Y DOBLE PULSACIÓN */
-  let isMessageShown = false;
 
   function showFinalMessage() {
     if (isMessageShown) return;
     isMessageShown = true;
 
-    if (lyricsTimer) clearInterval(lyricsTimer);
+    if (lyricsInterval) clearInterval(lyricsInterval);
     lyricEl.classList.remove('visible');
     document.getElementById('hintTap').classList.remove('show');
-
-    const message = document.getElementById('message');
-    message.classList.add('visible');
+    document.getElementById('message').classList.add('visible');
   }
 
   let lastTap = 0;
   function handleDblAction(e) {
     if (e.target.closest('#startBtn') || e.target.closest('#replayBtn') || e.target.closest('.file-select-label')) return;
-
     const now = Date.now();
     if (now - lastTap < 400 && now - lastTap > 0) {
       showFinalMessage();
@@ -829,84 +1300,127 @@
   window.addEventListener('click', handleDblAction);
   window.addEventListener('touchend', handleDblAction);
 
-  /* SECUENCIA PRINCIPAL */
+  /* SECUENCIA CINEMATOGRÁFICA */
   const timers = [];
 
-  function startExperience() {
-    const sunflower = document.getElementById('introSunflower');
-    const meadowBg = document.getElementById('meadowBg');
+  function startCinematicExperience() {
+    const cameraRig = document.getElementById('cameraRig');
+    const skySunset = document.getElementById('skySunset');
+    const skyTwilight = document.getElementById('skyTwilight');
+    const skyNight = document.getElementById('skyNight');
+    const cinemaSun = document.getElementById('cinemaSun');
+    const cinemaMoon = document.getElementById('cinemaMoon');
+    const starsLayer = document.getElementById('starsLayer');
+    const hillsFar = document.getElementById('hillsFar');
+    const hillsMid = document.getElementById('hillsMid');
+    const hillsNear = document.getElementById('hillsNear');
+    const cloudsLayer = document.getElementById('cloudsLayer');
+    const fogBandFar = document.getElementById('fogBandFar');
+    const fogBandMid = document.getElementById('fogBandMid');
+    const heroFlower = document.getElementById('heroFlower');
+    const introSunflower = document.getElementById('introSunflower');
     const bokehBg = document.getElementById('bokehBg');
-    const flowerField = document.getElementById('flowerField');
 
-    sunflower.classList.add('playing');
+    buildFlowerMeadow();
+    buildGrassTufts();
+    populateStars();
+
+    introSunflower.classList.add('playing');
 
     timers.push(setTimeout(() => {
-      triggerBurst();
+      triggerPetalBurst();
+      initGentlePetals();
     }, 4100));
 
     timers.push(setTimeout(() => {
-      sunflower.style.display = 'none';
+      introSunflower.style.display = 'none';
+      bokehBg.classList.add('fade-out');
 
-      bgMusic.volume = 1.0;
-      bgMusic.play().catch(() => {});
-
-      meadowBg.style.opacity = '1';
-      bokehBg.style.opacity = '0';
-      createMeadow();
-      flowerField.style.opacity = '1';
-      initGentleFall();
-
-      document.getElementById('nightBg').classList.add('active');
-      document.getElementById('nightVeil').classList.add('active');
-      document.getElementById('starsLayer').classList.add('active');
-      document.getElementById('moon').classList.add('active');
-      createStars();
-
-      document.getElementById('hintTap').classList.add('show');
-    }, 4900));
+      fogBandFar.classList.add('dusk');
+      fogBandMid.classList.add('dusk');
+      cameraRig.classList.add('zoom-in');
+    }, 4800));
 
     timers.push(setTimeout(() => {
+      heroFlower.classList.add('bloomed');
+    }, 6500));
+
+    timers.push(setTimeout(() => {
+      cinemaSun.classList.add('sink');
+      skyTwilight.classList.add('active');
+      cloudsLayer.classList.add('night');
+    }, 9000));
+
+    timers.push(setTimeout(() => {
+      skySunset.classList.add('fade-out');
+      skyNight.classList.add('active');
+      starsLayer.classList.add('active');
+      hillsFar.classList.add('night');
+      hillsMid.classList.add('night');
+      hillsNear.classList.add('night');
+      fogBandFar.classList.remove('dusk');
+      fogBandMid.classList.remove('dusk');
+      fogBandFar.classList.add('night');
+      fogBandMid.classList.add('night');
+      currentEnvironment = 'night';
+    }, 11500));
+
+    timers.push(setTimeout(() => {
+      heroFlower.classList.add('night-glow');
+    }, 13000));
+
+    timers.push(setTimeout(() => {
+      cinemaMoon.classList.add('active');
+      heroFlower.classList.add('face-moon');
+    }, 14500));
+
+    timers.push(setTimeout(() => {
+      bgMusic.volume = 1.0;
+      bgMusic.play().catch(() => {});
       startLyricsClock();
-    }, 7900));
+      document.getElementById('hintTap').classList.add('show');
+    }, 16000));
   }
 
-  function resetScene() {
+  function resetExperience() {
     timers.forEach(t => clearTimeout(t));
     timers.length = 0;
-    if (gentleFallInterval) clearInterval(gentleFallInterval);
-    if (lyricsTimer) clearInterval(lyricsTimer);
-
-    particles = [];
-    isMessageShown = false;
-    activeCue = null;
+    if (lyricsInterval) clearInterval(lyricsInterval);
+    if (gentlePetalTimer) clearInterval(gentlePetalTimer);
 
     bgMusic.pause();
     bgMusic.currentTime = 0;
+    isMessageShown = false;
+    activeCue = null;
+    currentEnvironment = 'sunset';
+    petals = [];
 
-    const sunflower = document.getElementById('introSunflower');
-    const meadowBg = document.getElementById('meadowBg');
-    const bokehBg = document.getElementById('bokehBg');
-    const flowerField = document.getElementById('flowerField');
-    const message = document.getElementById('message');
+    const introSunflower = document.getElementById('introSunflower');
+    introSunflower.style.display = 'flex';
+    introSunflower.className = 'intro-sunflower-container';
+    void introSunflower.offsetWidth;
 
-    message.classList.remove('visible');
+    document.getElementById('bokehBg').className = 'bokeh-bg';
+    document.getElementById('cameraRig').className = 'cinema-camera';
+    document.getElementById('skySunset').className = 'sky-sunset';
+    document.getElementById('skyTwilight').className = 'sky-twilight';
+    document.getElementById('skyNight').className = 'sky-night';
+    document.getElementById('cinemaSun').className = 'cinematic-sun';
+    document.getElementById('cinemaMoon').className = 'cinematic-moon';
+    document.getElementById('starsLayer').className = 'stars-layer';
+    document.getElementById('hillsFar').className = 'hills-far';
+    document.getElementById('hillsMid').className = 'hills-mid';
+    document.getElementById('hillsNear').className = 'hills-near';
+    document.getElementById('cloudsLayer').className = 'clouds-layer';
+    document.getElementById('fogBandFar').className = 'fog-band';
+    document.getElementById('fogBandMid').className = 'fog-band';
+    document.getElementById('heroFlower').className = 'hero-flower';
+
+    document.getElementById('message').classList.remove('visible');
     document.getElementById('hintTap').classList.remove('show');
     lyricEl.classList.remove('visible');
 
-    flowerField.style.opacity = '0';
-    flowerField.innerHTML = '';
-    meadowBg.style.opacity = '0';
-    bokehBg.style.opacity = '1';
-
-    document.getElementById('nightBg').classList.remove('active');
-    document.getElementById('nightVeil').classList.remove('active');
-    document.getElementById('starsLayer').classList.remove('active');
-    document.getElementById('moon').classList.remove('active');
-
-    sunflower.style.display = 'flex';
-    sunflower.classList.remove('playing');
-    void sunflower.offsetWidth;
-    startExperience();
+    startCinematicExperience();
   }
 
   document.getElementById('startBtn').addEventListener('click', () => {
@@ -916,12 +1430,12 @@
     }).catch(() => {});
 
     document.getElementById('startGate').classList.add('hidden');
-    startExperience();
+    startCinematicExperience();
   });
 
   document.getElementById('replayBtn').addEventListener('click', (e) => {
     e.stopPropagation();
-    resetScene();
+    resetExperience();
   });
 </script>
 
